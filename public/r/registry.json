@@ -1,78 +1,33 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "acme",
-  "homepage": "https://acme.com",
+  "homepage": "https://veiag.dev",
   "items": [
     {
-      "name": "hello-world",
-      "type": "registry:component",
-      "title": "Hello World",
-      "description": "A simple hello world component",
-      "registryDependencies": ["button"],
+      "name": "color-picker",
+      "type": "registry:item",
+      "title": "Color Picker",
+      "description": "A customizable color picker field for PayloadCMS.",
       "files": [
         {
-          "path": "registry/new-york/blocks/hello-world/hello-world.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "example-form",
-      "type": "registry:component",
-      "title": "Example Form",
-      "description": "A contact form with Zod validation.",
-      "dependencies": ["zod"],
-      "registryDependencies": ["button", "input", "label", "textarea", "card"],
-      "files": [
-        {
-          "path": "registry/new-york/blocks/example-form/example-form.tsx",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "complex-component",
-      "type": "registry:component",
-      "title": "Complex Component",
-      "description": "A complex component showing hooks, libs and components.",
-      "registryDependencies": ["card"],
-      "files": [
-        {
-          "path": "registry/new-york/blocks/complex-component/page.tsx",
-          "type": "registry:page",
-          "target": "app/pokemon/page.tsx"
+          "path": "registry/fields/color-picker/field.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/color-picker/field.ts"
         },
-        {
-          "path": "registry/new-york/blocks/complex-component/components/pokemon-card.tsx",
-          "type": "registry:component"
+         {
+          "path": "registry/fields/color-picker/index.tsx",
+          "type": "registry:file",
+          "target": "~/src/fields/color-picker/index.tsx"
         },
-        {
-          "path": "registry/new-york/blocks/complex-component/components/pokemon-image.tsx",
-          "type": "registry:component"
+         {
+          "path": "registry/fields/color-picker/style.scss",
+          "type": "registry:file",
+          "target": "~/src/fields/color-picker/style.scss"
         },
-        {
-          "path": "registry/new-york/blocks/complex-component/lib/pokemon.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "registry/new-york/blocks/complex-component/hooks/use-pokemon.ts",
-          "type": "registry:hook"
-        }
-      ]
-    },
-    {
-      "name": "example-with-css",
-      "type": "registry:component",
-      "title": "Example with CSS",
-      "description": "A login form with a CSS file.",
-      "files": [
-        {
-          "path": "registry/new-york/blocks/example-with-css/example-card.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "registry/new-york/blocks/example-with-css/example-card.css",
-          "type": "registry:component"
+         {
+          "path": "registry/fields/color-picker/types.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/color-picker/types.ts"
         }
       ]
     }
