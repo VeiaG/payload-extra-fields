@@ -1,0 +1,205 @@
+---
+title: Color Picker
+description: A customizable color picker field for PayloadCMS.
+---
+
+import { ComponentPreview } from "@/components/component-preview"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+# Color Picker
+
+A customizable color picker field with presets, debounce, and hex validation for PayloadCMS.
+
+<ComponentPreview name="color-picker-demo" />
+
+## Installation
+
+<Tabs defaultValue="auto">
+  <TabsList className="grid w-full max-w-md grid-cols-2">
+    <TabsTrigger value="auto">Auto</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="auto">
+
+Use the following command to install the color picker component:
+
+```bash
+npx shadcn@latest add https://veiag.dev/r/color-picker
+```
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+<div className="space-y-6">
+
+### 1. Install dependencies
+
+```bash
+npm install @payloadcms/ui payload
+```
+
+### 2. Create the types file
+
+```typescript title="src/fields/color-picker/types.ts"
+import { TextField } from 'payload'
+
+export type ColorPickerArgs = {
+  name?: string
+  required?: boolean
+  colorPresets?: string[]
+  debounceDelay?: number
+  description?: string
+  showTextInput?: boolean
+  overrides?: (field: TextField) => TextField
+}
+
+export type ColorPickerProps = Pick<
+  ColorPickerArgs,
+  'colorPresets' | 'debounceDelay' | 'showTextInput'
+>
+```
+
+### 3. Create the field function
+
+```typescript title="src/fields/color-picker/field.ts"
+import { TextField } from 'payload'
+import { ColorPickerArgs } from './types'
+import { text } from 'payload/shared'
+
+export const colorField = (options?: ColorPickerArgs): TextField => {
+  const baseField: TextField = {
+    name: options?.name || 'color',
+    type: 'text',
+    required: options?.required || false,
+    admin: {
+      description: options?.description,
+      components: {
+        Field: {
+          path: '@/fields/color-picker',
+          clientProps: {
+            colorPresets: options?.colorPresets || [],
+            debounceDelay: options?.debounceDelay || 300,
+            showTextInput: options?.showTextInput !== false,
+          },
+        },
+      },
+    },
+    validate: (value, args) => {
+      if (value && !/^#([0-9A-F]{3}){1,2}$/i.test(value)) {
+        return 'Invalid color format'
+      }
+      return text(value, args)
+    },
+  }
+  if (typeof options?.overrides === 'function') {
+    return options.overrides(baseField)
+  }
+  return baseField
+}
+```
+
+### 4. Add the component and styles
+
+Copy the component code from the [GitHub repository](https://github.com/yourusername/payload-extra-fields) to your project:
+
+- `src/fields/color-picker/index.tsx`
+- `src/fields/color-picker/style.scss`
+
+</div>
+
+  </TabsContent>
+</Tabs>
+
+## Usage
+
+### Basic usage
+
+```typescript
+import { colorField } from '@/fields/color-picker/field'
+
+export const MyCollection = {
+  slug: 'my-collection',
+  fields: [
+    colorField({
+      name: 'backgroundColor',
+      required: true,
+      description: 'Choose a background color for your page',
+    }),
+  ],
+}
+```
+
+### With presets
+
+```typescript
+import { colorField } from '@/fields/color-picker/field'
+
+export const MyCollection = {
+  slug: 'my-collection',
+  fields: [
+    colorField({
+      name: 'themeColor',
+      colorPresets: [
+        '#FF6B6B',
+        '#4ECDC4',
+        '#45B7D1',
+        '#FFA07A',
+        '#98D8C8',
+        '#F7DC6F',
+        '#BB8FCE',
+        '#85C1E2',
+      ],
+      showTextInput: true,
+      debounceDelay: 500,
+    }),
+  ],
+}
+```
+
+### Advanced usage
+
+```typescript
+import { colorField } from '@/fields/color-picker/field'
+
+export const MyCollection = {
+  slug: 'my-collection',
+  fields: [
+    colorField({
+      name: 'brandColor',
+      required: true,
+      description: 'Primary brand color',
+      colorPresets: ['#0066FF', '#FF3366', '#00CC66'],
+      debounceDelay: 300,
+      showTextInput: true,
+      overrides: (field) => ({
+        ...field,
+        admin: {
+          ...field.admin,
+          condition: (data) => data.useCustomBranding === true,
+        },
+      }),
+    }),
+  ],
+}
+```
+
+## API Reference
+
+### ColorPickerArgs
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | `'color'` | The name of the field |
+| `required` | `boolean` | `false` | Whether the field is required |
+| `colorPresets` | `string[]` | `[]` | Array of hex color codes for quick selection |
+| `debounceDelay` | `number` | `300` | Debounce delay in milliseconds |
+| `showTextInput` | `boolean` | `true` | Show text input alongside color picker |
+| `description` | `string` | - | Description for the admin UI |
+| `overrides` | `(field: TextField) => TextField` | - | Function to override fields at a granular level |
+
+## Features
+
+- **Color Presets** - Provide a list of preset colors for quick selection
+- **Debounced Input** - Configurable debounce delay for smooth typing experience
+- **Hex Validation** - Built-in validation for hex color format with visual feedback
+- **Native Color Input** - Uses native HTML color input for consistent UX across browsers
