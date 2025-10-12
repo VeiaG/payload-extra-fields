@@ -1,6 +1,4 @@
 import { defineConfig, defineDocs } from "fumadocs-mdx/config"
-import { rehypeCode } from "fumadocs-core/mdx-plugins"
-
 export default defineConfig({
 })
 

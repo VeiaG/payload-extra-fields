@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/shadcnButton"
 import { ArrowRight, Palette } from "lucide-react"
 
 const components = [
@@ -59,7 +59,7 @@ export default function ComponentsPage() {
             <CardHeader>
               <CardTitle className="text-muted-foreground">More Coming Soon</CardTitle>
               <CardDescription>
-                We're working on adding more components. Check back soon!
+                We&apos;re working on adding more components. Check back soon!
               </CardDescription>
             </CardHeader>
           </Card>

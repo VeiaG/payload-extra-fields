@@ -5,14 +5,12 @@ export const Index: Record<
   {
     name: string
     component: React.ComponentType
-    files?: string[]
     source?: string
   }
 > = {
   "color-picker-demo": {
     name: "color-picker-demo",
     component: dynamic(() => import("@/components/examples/color-picker-demo")),
-    files: ["components/examples/color-picker-demo.tsx"],
     source: `import { colorField } from '@/fields/color-picker/field'
 
 export const MyCollection = {

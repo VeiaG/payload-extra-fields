@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/shadcnButton"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Palette, Download, Code2, Zap } from "lucide-react"
@@ -125,7 +125,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="text-muted-foreground">More Coming Soon</CardTitle>
                 <CardDescription>
-                  We're working on more components. Star the repo to stay updated!
+                  We&apos;re working on more components. Star the repo to stay updated!
                 </CardDescription>
               </CardHeader>
             </Card>
