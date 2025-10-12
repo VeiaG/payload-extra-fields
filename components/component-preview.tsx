@@ -1,4 +1,3 @@
-"use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Index } from "@/registry/__index__";

@@ -6,21 +6,18 @@ import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 import { ComponentPreview } from "@/components/component-preview"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {ManualInstall} from "@/components/manual-install"
 
-# Color Picker
-
-A customizable color picker field with presets, debounce, and hex validation for PayloadCMS. Includes both the UI component and a utility function (`colorField`) to easily add it to your collection schemas.
-
-<ComponentPreview name="color-picker-demo" />
+<ComponentPreview name="color-picker" />
 
 ## Installation
 
-<Tabs defaultValue="auto">
-  <TabsList className="grid w-full max-w-md grid-cols-2">
-    <TabsTrigger value="auto">Auto</TabsTrigger>
+<Tabs defaultValue="cli">
+  <TabsList >
+    <TabsTrigger value="cli">CLI</TabsTrigger>
     <TabsTrigger value="manual">Manual</TabsTrigger>
   </TabsList>
-  <TabsContent value="auto">
+  <TabsContent value="cli">
 
 Use the following command to install the color picker field (includes both the component and utility function):
 
@@ -30,83 +27,9 @@ npx shadcn@latest add https://veiag.dev/r/color-picker
 
   </TabsContent>
   <TabsContent value="manual">
+Copy and paste the following code into your project to manually install the color picker field:
 
-<div className="space-y-6">
-
-### 1. Install dependencies
-
-```npm
-npm install @payloadcms/ui payload
-```
-
-### 2. Create the types file
-
-```typescript title="src/fields/color-picker/types.ts"
-import { TextField } from 'payload'
-
-export type ColorPickerArgs = {
-  name?: string
-  required?: boolean
-  colorPresets?: string[]
-  debounceDelay?: number
-  description?: string
-  showTextInput?: boolean
-  overrides?: (field: TextField) => TextField
-}
-
-export type ColorPickerProps = Pick<
-  ColorPickerArgs,
-  'colorPresets' | 'debounceDelay' | 'showTextInput'
->
-```
-
-### 3. Create the field function
-
-```typescript title="src/fields/color-picker/field.ts"
-import { TextField } from 'payload'
-import { ColorPickerArgs } from './types'
-import { text } from 'payload/shared'
-
-export const colorField = (options?: ColorPickerArgs): TextField => {
-  const baseField: TextField = {
-    name: options?.name || 'color',
-    type: 'text',
-    required: options?.required || false,
-    admin: {
-      description: options?.description,
-      components: {
-        Field: {
-          path: '@/fields/color-picker',
-          clientProps: {
-            colorPresets: options?.colorPresets || [],
-            debounceDelay: options?.debounceDelay || 300,
-            showTextInput: options?.showTextInput !== false,
-          },
-        },
-      },
-    },
-    validate: (value, args) => {
-      if (value && !/^#([0-9A-F]{3}){1,2}$/i.test(value)) {
-        return 'Invalid color format'
-      }
-      return text(value, args)
-    },
-  }
-  if (typeof options?.overrides === 'function') {
-    return options.overrides(baseField)
-  }
-  return baseField
-}
-```
-
-### 4. Add the component and styles
-
-Copy the component code from the [GitHub repository](https://github.com/yourusername/payload-extra-fields) to your project:
-
-- `src/fields/color-picker/index.tsx`
-- `src/fields/color-picker/style.scss`
-
-</div>
+<ManualInstall name="color-picker" />
 
   </TabsContent>
 </Tabs>
@@ -186,9 +109,6 @@ export const MyCollection = {
 
 ## API Reference
 
-### ColorPickerArgs
-
-
 <TypeTable
   type={{
     name: {
@@ -222,7 +142,7 @@ export const MyCollection = {
       default: '-',
     },
     overrides: {
-      description: 'Function to override fields at a granular level',
+      description: 'Function to override field at a granular level',
       type: '(field: TextField) => TextField',
       default: '-',
     },

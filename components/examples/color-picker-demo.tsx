@@ -74,13 +74,13 @@ export default function ColorPickerDemo() {
 
       <div className="space-y-2 border-t pt-4">
         <Label>Presets</Label>
-        <div className="grid grid-cols-8 gap-2">
+        <div className="flex gap-2 flex-wrap">
           {colorPresets.map((presetColor, index) => (
             <button
               key={`${presetColor}-${index}`}
               type="button"
               onClick={() => handlePresetClick(presetColor)}
-              className={`w-10 h-10 rounded-md border-2 transition-all hover:scale-110 ${
+              className={`w-10 h-10 rounded-md border-2 transition-all hover:scale-110 shrink-0 ${
                 color.toLowerCase() === presetColor.toLowerCase()
                   ? "border-primary ring-2 ring-primary ring-offset-2"
                   : "border-input"

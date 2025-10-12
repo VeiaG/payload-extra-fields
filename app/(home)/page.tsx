@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/shadcnButton"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Palette, Download, Code2, Zap } from "lucide-react"
+import { PayloadLogo } from "@/components/icons"
 
 export default function Home() {
   return (
@@ -12,11 +13,14 @@ export default function Home() {
         <Badge variant="secondary" className="mb-4">
           PayloadCMS Custom Fields
         </Badge>
+                   
+
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6 max-w-4xl">
           Custom fields for{" "}
-          <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
-            PayloadCMS
-          </span>
+          <div className="inline-flex gap-2 items-center overflow-visible">
+            <PayloadLogo className="size-16 inline-block" />
+              Payload
+          </div>
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mb-8">
           A collection of customizable, accessible custom fields built specifically for PayloadCMS.
@@ -24,7 +28,7 @@ export default function Home() {
         </p>
         <div className="flex gap-4 flex-wrap justify-center">
           <Button asChild size="lg">
-            <Link href="/components">
+            <Link href="/fields">
               Browse Fields <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -71,7 +75,7 @@ export default function Home() {
             <Card>
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-primary" />
+                  <PayloadLogo className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle>PayloadCMS Native</CardTitle>
                 <CardDescription>
@@ -107,7 +111,7 @@ export default function Home() {
               <CardContent>
                 <div className="flex gap-2">
                   <Button asChild size="sm">
-                    <Link href="/docs/components/color-picker">
+                    <Link href="/docs/fields/color-picker">
                       View Docs
                     </Link>
                   </Button>
@@ -125,7 +129,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="text-muted-foreground">More Coming Soon</CardTitle>
                 <CardDescription>
-                  We&apos;re working on more components. Star the repo to stay updated!
+                  We&apos;re working on more fields. Star the repo to stay updated!
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -142,12 +146,12 @@ export default function Home() {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Button asChild size="lg">
-              <Link href="/components">
+              <Link href="/fields">
                 Browse Fields
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <a href="https://github.com/yourusername/payload-extra-fields" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/veiag/payload-extra-fields" target="_blank" rel="noopener noreferrer">
                 View on GitHub
               </a>
             </Button>

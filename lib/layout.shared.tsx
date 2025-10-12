@@ -17,8 +17,8 @@ export function baseOptions(): BaseLayoutProps {
                 active:'none'
             },
             {
-                text:'Components',
-                url:"/components/",
+                text:'Fields',
+                url:"/fields/",
                 active:'nested-url',
             }
         ],

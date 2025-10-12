@@ -2,9 +2,6 @@
 
 A custom registry for PayloadCMS fields built using the `shadcn` CLI. This registry allows you to distribute custom PayloadCMS fields (including both UI components and utility functions) to any PayloadCMS project.
 
-> [!IMPORTANT]  
-> This template uses Tailwind v4. For Tailwind v3, see [registry-template-v3](https://github.com/shadcn-ui/registry-template-v3).
-
 ## Getting Started
 
 This registry provides custom fields for PayloadCMS using the shadcn CLI infrastructure.

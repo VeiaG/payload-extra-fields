@@ -1,6 +1,6 @@
 'use client'
 import { FieldDescription, FieldError, FieldLabel, TextInput, useField } from '@payloadcms/ui'
-import { TextField, TextFieldClientProps } from 'payload'
+import { TextFieldClientProps } from 'payload'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './style.scss'
 import { ColorPickerProps } from './types'

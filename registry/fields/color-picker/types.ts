@@ -33,7 +33,7 @@ export type ColorPickerArgs = {
    */
   showTextInput?: boolean
   /**
-   * A function used to override fields at a granular level.
+   * A function used to override field at a granular level.
    */
   overrides?: (field: TextField) => TextField
 }

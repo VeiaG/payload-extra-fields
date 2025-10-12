@@ -5,11 +5,16 @@ export const Index: Record<
   {
     name: string
     component: React.ComponentType
+    /**
+     * Source code of example component
+     */
     source?: string
+
+    files?: string[]
   }
 > = {
-  "color-picker-demo": {
-    name: "color-picker-demo",
+  "color-picker": {
+    name: "color-picker",
     component: dynamic(() => import("@/components/examples/color-picker-demo")),
     source: `import { colorField } from '@/fields/color-picker/field'
 
@@ -31,6 +36,11 @@ export const MyCollection = {
       debounceDelay: 500,
     }),
   ],
-}`
+}`,
+    files: ["/registry/fields/color-picker/index.tsx",
+      "/registry/fields/color-picker/field.ts",
+      "/registry/fields/color-picker/types.ts",
+      "/registry/fields/color-picker/style.scss"
+    ]
   },
 }

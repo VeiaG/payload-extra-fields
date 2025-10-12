@@ -8,7 +8,7 @@ const components = [
   {
     name: "Color Picker",
     description: "A customizable color picker field with presets, debounce, and hex validation for PayloadCMS.",
-    href: "/docs/components/color-picker",
+    href: "/docs/fields/color-picker",
     icon: Palette,
     badge: "New",
   },
