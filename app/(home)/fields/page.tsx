@@ -2,9 +2,16 @@ import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/shadcnButton"
-import { ArrowRight, Palette } from "lucide-react"
+import { ArrowRight, CircleDot, Palette } from "lucide-react"
 
 const components = [
+  {
+    name: "Lucide Icon Picker",
+    description: "A customizable icon picker field for PayloadCMS with Lucide icons, fuzzy search, and virtualized rendering.",
+    href: "/docs/fields/lucide-icon-picker",
+    icon: CircleDot,
+    badge: "New",
+  },
   {
     name: "Color Picker",
     description: "A customizable color picker field with presets, debounce, and hex validation for PayloadCMS.",
@@ -12,6 +19,7 @@ const components = [
     icon: Palette,
     badge: "New",
   },
+  
 ]
 
 export default function ComponentsPage() {

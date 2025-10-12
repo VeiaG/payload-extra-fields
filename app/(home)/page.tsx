@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/shadcnButton"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Palette, Download, Code2 } from "lucide-react"
+import { ArrowRight, Palette, Code2 } from "lucide-react"
 import { PayloadLogo } from "@/components/icons"
 
 export default function Home() {
@@ -115,11 +115,25 @@ export default function Home() {
                       View Docs
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <a href="https://github.com/yourusername/payload-extra-fields" target="_blank" rel="noopener noreferrer">
-                      <Download className="mr-2 h-4 w-4" />
-                      Install
-                    </a>
+                </div>
+              </CardContent>
+            </Card>
+             <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-2">
+                  <CardTitle>Lucide Icon Picker</CardTitle>
+                  <Badge>New</Badge>
+                </div>
+                <CardDescription>
+                  A customizable icon picker field for PayloadCMS with Lucide icons, fuzzy search, and virtualized rendering.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-2">
+                  <Button asChild size="sm">
+                    <Link href="/docs/fields/lucide-icon-picker">
+                      View Docs
+                    </Link>
                   </Button>
                 </div>
               </CardContent>
