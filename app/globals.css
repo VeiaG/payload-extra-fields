@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "fumadocs-ui/style.css";
-
+@import 'fumadocs-ui/css/shadcn.css';
+@import 'fumadocs-ui/css/preset.css';
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -120,4 +120,9 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Inline code */
+  /* :not(pre) > code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  } */
 }

@@ -2,6 +2,7 @@
 title: Color Picker
 description: A customizable color picker field for PayloadCMS.
 ---
+import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 import { ComponentPreview } from "@/components/component-preview"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -23,7 +24,7 @@ A customizable color picker field with presets, debounce, and hex validation for
 
 Use the following command to install the color picker component:
 
-```bash
+```npm
 npx shadcn@latest add https://veiag.dev/r/color-picker
 ```
 
@@ -34,7 +35,7 @@ npx shadcn@latest add https://veiag.dev/r/color-picker
 
 ### 1. Install dependencies
 
-```bash
+```npm
 npm install @payloadcms/ui payload
 ```
 
@@ -187,15 +188,46 @@ export const MyCollection = {
 
 ### ColorPickerArgs
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `name` | `string` | `'color'` | The name of the field |
-| `required` | `boolean` | `false` | Whether the field is required |
-| `colorPresets` | `string[]` | `[]` | Array of hex color codes for quick selection |
-| `debounceDelay` | `number` | `300` | Debounce delay in milliseconds |
-| `showTextInput` | `boolean` | `true` | Show text input alongside color picker |
-| `description` | `string` | - | Description for the admin UI |
-| `overrides` | `(field: TextField) => TextField` | - | Function to override fields at a granular level |
+
+<TypeTable
+  type={{
+    name: {
+      description: 'The name of the field',
+      type: 'string',
+      default: "'color'",
+    },
+    required: {
+      description: 'Whether the field is required',
+      type: 'boolean',
+      default: 'false',
+    },
+    colorPresets: {
+      description: 'Array of hex color codes for quick selection',
+      type: 'string[]',
+      default: '[]',
+    },
+    debounceDelay: {
+      description: 'Debounce delay in milliseconds',
+      type: 'number',
+      default: '300',
+    },
+    showTextInput: {
+      description: 'Show text input alongside color picker',
+      type: 'boolean',
+      default: 'true',
+    },
+    description: {
+      description: 'Description for the admin UI',
+      type: 'string',
+      default: '-',
+    },
+    overrides: {
+      description: 'Function to override fields at a granular level',
+      type: '(field: TextField) => TextField',
+      default: '-',
+    },
+  }}
+/>
 
 ## Features
 
