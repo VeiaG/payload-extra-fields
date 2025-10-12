@@ -28,7 +28,7 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED=1
 
 #Build registry
-RUN npm run build:registry
+RUN npm run registry:build
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
