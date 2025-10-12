@@ -19,9 +19,9 @@ export default function ComponentsPage() {
     <div className="container py-8 md:py-12">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col gap-4 mb-8">
-          <h1 className="text-4xl font-bold tracking-tight">Components</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Fields</h1>
           <p className="text-lg text-muted-foreground">
-            Beautifully designed components that you can copy and paste into your PayloadCMS apps.
+            Beautifully designed custom fields that you can copy and paste into your PayloadCMS apps. Each field includes both the UI component and utility function for easy integration.
           </p>
         </div>
 
@@ -47,7 +47,7 @@ export default function ComponentsPage() {
                 <CardContent>
                   <Button asChild size="sm" className="w-full">
                     <Link href={component.href}>
-                      View Component <ArrowRight className="ml-2 h-4 w-4" />
+                      View Field <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
                 </CardContent>
@@ -59,7 +59,7 @@ export default function ComponentsPage() {
             <CardHeader>
               <CardTitle className="text-muted-foreground">More Coming Soon</CardTitle>
               <CardDescription>
-                We&apos;re working on adding more components. Check back soon!
+                We&apos;re working on adding more fields. Check back soon!
               </CardDescription>
             </CardHeader>
           </Card>

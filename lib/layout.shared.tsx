@@ -6,7 +6,7 @@ export function baseOptions(): BaseLayoutProps {
           title: (
             <div className="flex items-center gap-2">
               <span className="font-bold">PayloadCMS</span>
-              <span className="text-muted-foreground">Components</span>
+              <span className="text-muted-foreground">Extra fields</span>
             </div>
           ),
         },

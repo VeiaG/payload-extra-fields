@@ -1,6 +1,6 @@
 ---
 title: Color Picker
-description: A customizable color picker field for PayloadCMS.
+description: A customizable color picker field for PayloadCMS with both component and utility function.
 ---
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 
@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 # Color Picker
 
-A customizable color picker field with presets, debounce, and hex validation for PayloadCMS.
+A customizable color picker field with presets, debounce, and hex validation for PayloadCMS. Includes both the UI component and a utility function (`colorField`) to easily add it to your collection schemas.
 
 <ComponentPreview name="color-picker-demo" />
 
@@ -22,7 +22,7 @@ A customizable color picker field with presets, debounce, and hex validation for
   </TabsList>
   <TabsContent value="auto">
 
-Use the following command to install the color picker component:
+Use the following command to install the color picker field (includes both the component and utility function):
 
 ```npm
 npx shadcn@latest add https://veiag.dev/r/color-picker

@@ -10,22 +10,22 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 py-24 md:py-32 text-center">
         <Badge variant="secondary" className="mb-4">
-          PayloadCMS Components
+          PayloadCMS Custom Fields
         </Badge>
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6 max-w-4xl">
-          Beautiful components for{" "}
+          Custom fields for{" "}
           <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
             PayloadCMS
           </span>
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mb-8">
-          A collection of customizable, accessible components built specifically for PayloadCMS.
-          Copy, paste, and customize to your needs.
+          A collection of customizable, accessible custom fields built specifically for PayloadCMS.
+          Each field includes both the UI component and utility function to easily integrate into your schemas.
         </p>
         <div className="flex gap-4 flex-wrap justify-center">
           <Button asChild size="lg">
             <Link href="/components">
-              Browse Components <ArrowRight className="ml-2 h-4 w-4" />
+              Browse Fields <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
@@ -39,7 +39,7 @@ export default function Home() {
       {/* Features Section */}
       <section className="px-4 py-16 md:py-24 bg-muted/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">Why use these components?</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">Why use these fields?</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Built with best practices, fully customizable, and ready to drop into your PayloadCMS projects.
           </p>
@@ -63,7 +63,7 @@ export default function Home() {
                 </div>
                 <CardTitle>Fully Customizable</CardTitle>
                 <CardDescription>
-                  Every component is built to be customized. Change colors, styles, and behavior to match your needs.
+                  Every field is built to be customized. Change colors, styles, and behavior to match your needs.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -83,13 +83,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Components Preview Section */}
+      {/* Fields Preview Section */}
       <section className="px-4 py-16 md:py-24">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Available Components</h2>
+            <h2 className="text-3xl font-bold mb-4">Available Fields</h2>
             <p className="text-muted-foreground">
-              More components coming soon!
+              More fields coming soon!
             </p>
           </div>
 
@@ -138,12 +138,12 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
           <p className="text-muted-foreground mb-8">
-            Browse our components or dive into the documentation.
+            Browse our fields or dive into the documentation.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Button asChild size="lg">
               <Link href="/components">
-                Browse Components
+                Browse Fields
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
