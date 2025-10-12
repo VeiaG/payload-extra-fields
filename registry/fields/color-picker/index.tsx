@@ -7,7 +7,6 @@ import {
   useField,
   useTranslation,
 } from '@payloadcms/ui'
-import { getTranslation } from '@payloadcms/translations'
 import { DefaultCellComponentProps, TextFieldClient, TextFieldClientProps } from 'payload'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './style.scss'
@@ -114,7 +113,6 @@ const ColorPicker: React.FC<TextFieldClientProps & ColorPickerProps> = ({
               placeholder="#000000"
               readOnly={actualReadOnly || disabled}
               path={path} // Provide path for Payload's form handling
-              className="color-picker__text-input--hidden"
               required={field.required}
             />
           )}

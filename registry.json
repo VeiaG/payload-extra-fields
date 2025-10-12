@@ -30,6 +30,45 @@
           "target": "~/src/fields/color-picker/types.ts"
         }
       ]
+    },
+    {
+      "name":"lucide-icon-picker",
+      "type":"registry:item",
+      "title":"Lucide Icon Picker",
+      "description":"A Lucide icon picker field for PayloadCMS.",
+      "dependencies": [
+        "lucide-react",
+        "fuse.js",
+        "@tanstack/react-virtual",
+        "usehooks-ts"
+      ],
+      "files": [
+        {
+          "path": "registry/fields/lucide-icon-picker/field.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/lucide-icon-picker/field.ts"
+        },
+        {
+          "path": "registry/fields/lucide-icon-picker/index.tsx",
+          "type": "registry:file",
+          "target": "~/src/fields/lucide-icon-picker/index.tsx"
+        },
+        {
+          "path": "registry/fields/lucide-icon-picker/style.scss",
+          "type": "registry:file",
+          "target": "~/src/fields/lucide-icon-picker/style.scss"
+        },
+        {
+          "path": "registry/fields/lucide-icon-picker/types.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/lucide-icon-picker/types.ts"
+        },
+        {
+          "path": "registry/fields/lucide-icon-picker/icons.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/lucide-icon-picker/icons.ts"
+        }
+      ]
     }
   ]
 }
