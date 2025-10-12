@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/shadcnButton"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Palette, Download, Code2, Zap } from "lucide-react"
+import { ArrowRight, Palette, Download, Code2 } from "lucide-react"
 import { PayloadLogo } from "@/components/icons"
 
 export default function Home() {
