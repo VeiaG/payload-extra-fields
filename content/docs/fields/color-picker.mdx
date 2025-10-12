@@ -1,6 +1,6 @@
 ---
 title: Color Picker
-description: A customizable color picker field for PayloadCMS with both component and utility function.
+description: A customizable color picker field for PayloadCMS with both components and utility function.
 ---
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 
@@ -19,11 +19,17 @@ import {ManualInstall} from "@/components/manual-install"
   </TabsList>
   <TabsContent value="cli">
 
-Use the following command to install the color picker field (includes both the component and utility function):
+Use the following command to install the color picker field:
 
 ```npm
 npx shadcn@latest add https://payload.veiag.dev/r/color-picker.json
 ```
+
+<Callout title="Important" type="error">
+  Currently, shadcn CLI removes `use client` directive from the top of the files. 
+  Please ensure to add it back to the top of `index.tsx` file in the color picker field directory.
+  I think this should be fixed in future releases of shadcn CLI.
+</Callout>
 
   </TabsContent>
   <TabsContent value="manual">
@@ -107,6 +113,10 @@ export const MyCollection = {
 }
 ```
 
+## Screenshots
+![Color Picker Field - Admin Edit View](./screenshots/color-picker/color-picker-edit.png)
+![Color Picker Field - Admin List View](./screenshots/color-picker/color-picker-list.png)
+
 ## API Reference
 
 <TypeTable
@@ -155,3 +165,4 @@ export const MyCollection = {
 - **Debounced Input** - Configurable debounce delay for smooth typing experience
 - **Hex Validation** - Built-in validation for hex color format with visual feedback
 - **Native Color Input** - Uses native HTML color input for consistent UX across browsers
+- **Custom Cell Component** - Displays a color swatch in admin list views

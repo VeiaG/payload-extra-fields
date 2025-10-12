@@ -1,6 +1,14 @@
 'use client'
-import { FieldDescription, FieldError, FieldLabel, TextInput, useField } from '@payloadcms/ui'
-import { TextFieldClientProps } from 'payload'
+import {
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  TextInput,
+  useField,
+  useTranslation,
+} from '@payloadcms/ui'
+import { getTranslation } from '@payloadcms/translations'
+import { DefaultCellComponentProps, TextFieldClient, TextFieldClientProps } from 'payload'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './style.scss'
 import { ColorPickerProps } from './types'
@@ -144,6 +152,29 @@ const ColorPicker: React.FC<TextFieldClientProps & ColorPickerProps> = ({
         </div>
       )}
       <FieldDescription description={field.admin?.description} path={path} />
+    </div>
+  )
+}
+
+export const ColorCell: React.FC<DefaultCellComponentProps<TextFieldClient>> = (props) => {
+  const { cellData, field } = props
+  const { i18n } = useTranslation()
+
+  return (
+    <div className="color-cell">
+      {cellData && <div style={{ backgroundColor: cellData }} className="cell-indicator" />}
+      <span>
+        {cellData
+          ? cellData
+          : i18n.t('general:noLabel', {
+              //Using field name, to prevent requiring "@payloadcms/translations"
+              //As ShadcnCLI will install latest version, which may be incompatible with Payload's version
+
+              //You can replace it with `getTranslation(('label' in field ? field.label : null) || 'data', i18n),`
+              //And install "@payloadcms/translations" with same version as Payload, to get the actual localized label
+              label: field.name,
+            })}
+      </span>
     </div>
   )
 }

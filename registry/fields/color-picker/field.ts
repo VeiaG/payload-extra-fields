@@ -18,6 +18,10 @@ export const colorField = (options?: ColorPickerArgs): TextField => {
             showTextInput: options?.showTextInput !== false, // default true
           },
         },
+        Cell: {
+          path: '@/fields/color-picker#ColorCell',
+          clientProps: {},
+        },
       },
     },
     validate: (value, args) => {
