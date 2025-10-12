@@ -21,6 +21,7 @@ import { iconsData } from './icons'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import Fuse from 'fuse.js'
 import { useDebounceValue } from 'usehooks-ts'
+
 interface TooltipProps {
   content: string
   children: React.ReactNode
@@ -90,8 +91,6 @@ const IconButton: React.FC<IconButtonProps> = React.memo(
     )
   },
   (prevProps, nextProps) => {
-    // Custom comparison: only re-render if these specific props change
-    // Explicitly ignoring onSelect callback changes - we only care about icon.name
     return (
       prevProps.icon.name === nextProps.icon.name &&
       prevProps.isSelected === nextProps.isSelected &&
@@ -174,59 +173,71 @@ const LucideIconPicker: React.FC<TextFieldClientProps & IconPickerProps> = ({
   }, [filteredIcons, categorized, debouncedSearch])
 
   const parentRef = useRef<HTMLDivElement>(null)
-  const [iconsPerRow, setIconsPerRow] = useState(8)
+  const [containerWidth, setContainerWidth] = useState(0)
 
-  // Calculate icons per row based on container width
+  // Calculate container width and icons per row
   useEffect(() => {
     if (!parentRef.current) return
 
-    const calculateIconsPerRow = () => {
+    const updateWidth = () => {
       if (parentRef.current) {
-        const containerWidth = parentRef.current.offsetWidth
-        // Icon width is 70-85px + 10px gap = ~85px per icon
-        const calculatedIconsPerRow = Math.floor(containerWidth / 85) || 8
-        setIconsPerRow(Math.max(4, calculatedIconsPerRow)) // Minimum 4 icons per row
+        setContainerWidth(parentRef.current.offsetWidth)
       }
     }
 
-    calculateIconsPerRow()
-    window.addEventListener('resize', calculateIconsPerRow)
-    return () => window.removeEventListener('resize', calculateIconsPerRow)
+    updateWidth()
+    const resizeObserver = new ResizeObserver(updateWidth)
+    resizeObserver.observe(parentRef.current)
+
+    return () => resizeObserver.disconnect()
   }, [isDrawerOpen])
 
-  // Flatten icons into rows for virtualization
-  const flattenedRows = useMemo(() => {
-    const rows: Array<{ type: 'category'; name: string } | { type: 'iconRow'; icons: IconData[] }> =
-      []
+  // Calculate icons per row based on container width
+  const iconsPerRow = useMemo(() => {
+    if (containerWidth === 0) return 8
+    // Icon: 70-85px, gap: 10px
+    const iconWidth = 85
+    const gap = 10
+    const calculated = Math.floor((containerWidth + gap) / (iconWidth + gap))
+    return Math.max(4, calculated)
+  }, [containerWidth])
+
+  // Flatten icons into rows with category headers
+  const gridRows = useMemo(() => {
+    const rows: Array<
+      | { type: 'category'; name: string; index: number }
+      | { type: 'iconRow'; icons: IconData[]; index: number }
+    > = []
+    let rowIndex = 0
 
     categorizedIcons.forEach((category) => {
-      rows.push({ type: 'category', name: category.name })
+      // Add category header
+      rows.push({ type: 'category', name: category.name, index: rowIndex++ })
 
       // Split icons into rows
       for (let i = 0; i < category.icons.length; i += iconsPerRow) {
         const rowIcons = category.icons.slice(i, i + iconsPerRow)
-        rows.push({ type: 'iconRow', icons: rowIcons })
+        rows.push({ type: 'iconRow', icons: rowIcons, index: rowIndex++ })
       }
     })
 
     return rows
   }, [categorizedIcons, iconsPerRow])
 
-  // Virtualizer for rows
+  // Row virtualizer
   const rowVirtualizer = useVirtualizer({
-    count: flattenedRows.length,
+    count: gridRows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: (index) => {
-      const row = flattenedRows[index]
-      return row?.type === 'category' ? 45 : 95
+      const row = gridRows[index]
+      return row?.type === 'category' ? 50 : 100
     },
-    overscan: 3,
+    overscan: 5,
   })
 
   const handleIconSelect = useCallback(
     (iconName: string) => {
       if (value === iconName) {
-        // If the same icon is selected, deselect it
         setValue(null)
         closeModal(drawerSlug)
         setSearchInput('')
@@ -257,14 +268,14 @@ const LucideIconPicker: React.FC<TextFieldClientProps & IconPickerProps> = ({
 
   const scrollToCategory = useCallback(
     (categoryName: string) => {
-      const categoryIndex = flattenedRows.findIndex(
+      const categoryIndex = gridRows.findIndex(
         (row) => row.type === 'category' && row.name === categoryName,
       )
       if (categoryIndex !== -1) {
         rowVirtualizer.scrollToIndex(categoryIndex, { align: 'start' })
       }
     },
-    [flattenedRows, rowVirtualizer],
+    [gridRows, rowVirtualizer],
   )
 
   // Handle drawer open/close
@@ -273,7 +284,6 @@ const LucideIconPicker: React.FC<TextFieldClientProps & IconPickerProps> = ({
       setIsLoading(true)
       const timer = setTimeout(() => {
         setIsLoading(false)
-        // Force virtualizer to remeasure after loading is complete
         requestAnimationFrame(() => {
           rowVirtualizer.measure()
         })
@@ -283,13 +293,11 @@ const LucideIconPicker: React.FC<TextFieldClientProps & IconPickerProps> = ({
     }
   }, [isDrawerOpen, rowVirtualizer])
 
-  // Stable disabled state
   const isDisabled = actualReadOnly || disabled
 
-  // Get virtual items
-  const virtualItems = rowVirtualizer.getVirtualItems()
+  const virtualRows = rowVirtualizer.getVirtualItems()
 
-  // Virtualized content - only renders visible rows
+  // Virtualized content
   const virtualContent = (
     <>
       {filteredIcons.length === 0 ? (
@@ -302,22 +310,21 @@ const LucideIconPicker: React.FC<TextFieldClientProps & IconPickerProps> = ({
             position: 'relative',
           }}
         >
-          {virtualItems.map((virtualItem) => {
-            const row = flattenedRows[virtualItem.index]
-
+          {virtualRows.map((virtualRow) => {
+            const row = gridRows[virtualRow.index]
             if (!row) return null
 
             return (
               <div
-                key={virtualItem.key}
-                data-index={virtualItem.index}
+                key={virtualRow.key}
+                data-index={virtualRow.index}
+                ref={rowVirtualizer.measureElement}
                 style={{
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   width: '100%',
-                  height: `${virtualItem.size}px`,
-                  transform: `translateY(${virtualItem.start}px)`,
+                  transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
                 {row.type === 'category' ? (
@@ -326,15 +333,16 @@ const LucideIconPicker: React.FC<TextFieldClientProps & IconPickerProps> = ({
                     <div className="icon-picker__category-divider" />
                   </div>
                 ) : (
-                  <div className="icon-picker__icon-grid">
+                  <div className="icon-picker__icon-row">
                     {row.icons.map((icon) => (
-                      <IconButton
-                        key={icon.name}
-                        icon={icon}
-                        isSelected={value === icon.name}
-                        onSelect={handleIconSelect}
-                        disabled={isDisabled}
-                      />
+                      <div key={icon.name} className="icon-picker__icon-cell">
+                        <IconButton
+                          icon={icon}
+                          isSelected={value === icon.name}
+                          onSelect={handleIconSelect}
+                          disabled={isDisabled}
+                        />
+                      </div>
                     ))}
                   </div>
                 )}
