@@ -28,12 +28,7 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED=1
 
 #Build registry
-RUN \
-  if [ -f yarn.lock ]; then yarn run build:registry; \
-  elif [ -f package-lock.json ]; then npm run build:registry; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build:registry; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN npm run build:registry
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
