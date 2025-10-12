@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "payload-extra-fields",
-  "homepage": "https://veiag.dev",
+  "homepage": "https://payload.veiag.dev",
   "items": [
     {
       "name": "color-picker",

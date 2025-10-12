@@ -159,7 +159,7 @@ A detailed description of what your field does and why it's useful.
   <TabsContent value="auto">
 
 ```npm
-npx shadcn@latest add https://veiag.dev/r/your-field
+npx shadcn@latest add https://payload.veiag.dev/r/your-field
 ```
 
   </TabsContent>
