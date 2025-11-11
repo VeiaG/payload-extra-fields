@@ -5,7 +5,7 @@ import { ArrayRowLabelArgs } from './types'
  *
  * Usage:
  * ```ts
- * import { customRowLabel } from '@/fields/array-row-label/utility'
+ * import { customRowLabel } from '@/components/array-row-label/utility'
  * 
  * ...
  *  {
@@ -34,7 +34,7 @@ export const customRowLabel = ({
   return {
     components: {
       RowLabel: {
-        path: '@/fields/array-row-label',
+        path: '@/components/array-row-label',
         clientProps: {
           fieldToUse,
           template: Boolean(template),
