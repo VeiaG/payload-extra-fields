@@ -25,6 +25,11 @@ export function baseOptions(): BaseLayoutProps {
                 text:'Components',
                 url:"/components/",
                 active:'nested-url',
+            },
+            {
+                text:'Plugins',
+                url:"/plugins/",
+                active:'nested-url',
             }
         ],
         githubUrl:"https://github.com/veiag/payload-extra-fields"

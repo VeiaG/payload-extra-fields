@@ -1,29 +1,144 @@
 ---
 title: Introduction
-description: Custom fields for PayloadCMS.
+description: Custom fields, utility components, and plugins for PayloadCMS.
 ---
 
-# PayloadCMS Extra Fields
+# PayloadCMS Extensions
 
-A collection of customizable, accessible custom fields built specifically for PayloadCMS.
-Each field includes both the UI component and utility function to easily integrate into your schemas.
+A growing collection of customizable, accessible fields, utility components, and plugins built specifically for PayloadCMS.
 
-## Why use these fields?
+## What's Included?
+
+### 🎨 Custom Fields
+Enhanced input fields for your PayloadCMS admin panel. Each field includes both the UI component and utility function to easily integrate into your schemas.
+
+**Examples:** Color Picker, Lucide Icon Picker
+
+### 🛠️ Utility Components
+Helper components to enhance your PayloadCMS development experience. These are reusable components that solve common UI and UX challenges.
+
+**Examples:** Array Row Label
+
+### 🔌 Plugins
+Powerful npm packages that extend PayloadCMS capabilities with advanced features and integrations.
+
+**Examples:** Algolia Search Plugin
+
+## Installation Methods
+
+### Fields & Components (Copy & Paste)
+No npm packages required. Copy the code directly into your project and customize as needed.
+
+```bash
+# Using CLI (recommended)
+npx shadcn@latest add https://payload.veiag.dev/r/color-picker.json
+
+# Or copy manually from the docs
+```
+
+### Plugins (npm Package)
+Install via your preferred package manager:
+
+```bash
+pnpm add @veiag/payload-algolia-search
+# or
+npm install @veiag/payload-algolia-search
+```
+
+## Why use this collection?
 
 Built with best practices, fully customizable, and ready to drop into your PayloadCMS projects.
 
-### Copy & Paste
-
-No npm packages required. Copy the code directly into your project and customize as needed.
+### Copy & Paste (Fields & Components)
+No npm packages required for fields and components. Copy the code directly into your project and customize as needed. Full control over your codebase.
 
 ### Fully Customizable
-
-Every field is built to be customized. Change colors, styles, and behavior to match your needs.
+Every component is built to be customized. Change colors, styles, and behavior to match your needs. You own the code.
 
 ### PayloadCMS Native
-
 Built specifically for PayloadCMS with proper type definitions and admin UI integration. Each field includes both the UI component and a utility function for seamless schema integration.
+
+### Production Ready
+All components and plugins are tested and used in production environments. They follow PayloadCMS best practices and conventions.
 
 ## Getting Started
 
-Browse the [fields](/docs/fields/color-picker) to get started.
+Choose your path:
+
+- **Browse [Custom Fields](/fields)** - Enhanced input fields for your admin panel
+- **Explore [Utility Components](/components)** - Helper components for common use cases
+- **Check [Plugins](/plugins)** - Powerful integrations and features
+
+Or jump directly to a specific component:
+
+- [Color Picker](/docs/fields/color-picker) - Customizable color picker field
+- [Lucide Icon Picker](/docs/fields/lucide-icon-picker) - Icon picker with fuzzy search
+- [Array Row Label](/docs/components/array-row-label) - Custom labels for array items
+- [Algolia Search Plugin](/docs/plugins/algolia-search) - Full-text search with Algolia
+
+## Quick Example
+
+### Using a Field
+
+```typescript
+import { colorField } from '@/fields/color-picker/field'
+
+export const MyCollection = {
+  slug: 'my-collection',
+  fields: [
+    colorField({
+      name: 'primaryColor',
+      required: true,
+    }),
+  ],
+}
+```
+
+### Using a Component
+
+```typescript
+import { customRowLabel } from '@/components/array-custom-label'
+
+export const MyCollection = {
+  slug: 'articles',
+  fields: [
+    {
+      name: 'sections',
+      type: 'array',
+      fields: [...],
+      admin: {
+        ...customRowLabel({ fieldToUse: 'title' }),
+      },
+    },
+  ],
+}
+```
+
+### Using a Plugin
+
+```typescript
+import { algoliaSearchPlugin } from '@veiag/payload-algolia-search'
+
+export default buildConfig({
+  plugins: [
+    algoliaSearchPlugin({
+      credentials: { /* ... */ },
+      collections: [{ slug: 'posts', indexFields: ['title', 'content'] }],
+    }),
+  ],
+})
+```
+
+## Contributing
+
+We welcome contributions! If you have ideas for new fields, components, or plugins, please open an issue or submit a pull request on [GitHub](https://github.com/veiag/payload-extra-fields).
+
+## Support
+
+- **Documentation**: Browse the docs for detailed guides
+- **GitHub Issues**: Report bugs or request features
+- **Discussions**: Ask questions and share ideas
+
+---
+
+Ready to enhance your PayloadCMS project? Start exploring the collection!

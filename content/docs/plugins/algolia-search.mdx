@@ -1,0 +1,561 @@
+---
+title: Algolia Search Plugin
+description: A powerful plugin to sync your Payload CMS collections with Algolia for fast and extensive search capabilities.
+---
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+## Overview
+
+The Payload Algolia Search Plugin bridges your Payload CMS with Algolia's powerful search infrastructure, enabling lightning-fast search capabilities across your collections.
+
+<Callout title="Features" type="info">
+- **Automatic Syncing**: Real-time synchronization when documents are created, updated, or deleted
+- **Collection Control**: Choose exactly which collections and fields to index
+- **Result Enrichment**: Option to fetch fresh, access-controlled data from Payload
+- **Custom Transformers**: Transform complex field types for optimal search indexing
+- **Admin UI Integration**: Built-in re-index button in the Payload admin panel
+- **RESTful Endpoints**: Dedicated endpoints for search and re-indexing operations
+</Callout>
+
+## Installation
+
+```npm
+npm install @veiag/payload-algolia-search
+```
+
+## Quick Start
+
+### 1. Configure Environment Variables
+
+Create or update your `.env` file:
+
+```bash
+ALGOLIA_APP_ID=your_app_id
+ALGOLIA_API_KEY=your_admin_api_key
+ALGOLIA_INDEX_NAME=your_index_name
+```
+
+<Callout title="Security Warning" type="error">
+The `ALGOLIA_API_KEY` should be your Admin/Write API Key and must be kept secret. Never expose it in client-side code.
+</Callout>
+
+### 2. Add Plugin to Config
+
+Add the plugin to your `payload.config.ts`:
+
+```typescript
+import { buildConfig } from 'payload/config'
+import { algoliaSearchPlugin } from '@veiag/payload-algolia-search'
+
+export default buildConfig({
+  // ... your existing config
+  plugins: [
+    algoliaSearchPlugin({
+      credentials: {
+        appId: process.env.ALGOLIA_APP_ID!,
+        apiKey: process.env.ALGOLIA_API_KEY!,
+        indexName: process.env.ALGOLIA_INDEX_NAME!,
+      },
+      collections: [
+        {
+          slug: 'posts',
+          indexFields: ['title', 'content', 'tags'],
+        },
+      ],
+    }),
+  ],
+})
+```
+
+### 3. Start Your Server
+
+The plugin will automatically:
+- Configure your Algolia index (if it exists)
+- Set up search and re-index endpoints
+- Start syncing your collections
+
+<Callout title="Initial Indexing" type="info">
+To index existing documents, use the re-index button in the admin UI or call the re-index endpoint.
+</Callout>
+
+## Configuration
+
+### Plugin Options
+
+<TypeTable
+  type={{
+    credentials: {
+      description: 'Algolia connection details (appId, apiKey, indexName)',
+      type: 'PluginAlgoliaCredentials',
+      default: '-',
+    },
+    collections: {
+      description: 'Array of collections to sync with Algolia',
+      type: 'CollectionAlgoliaConfig[]',
+      default: '-',
+    },
+    searchEndpoint: {
+      description: 'Search endpoint path (set to false to disable)',
+      type: 'string | false',
+      default: "'/search'",
+    },
+    reindexEndpoint: {
+      description: 'Re-index endpoint path (set to false to disable)',
+      type: 'string | false',
+      default: "'/reindex'",
+    },
+    overrideAccess: {
+      description: 'Override access control when enriching search results',
+      type: 'boolean',
+      default: 'false',
+    },
+    configureIndexOnInit: {
+      description: 'Auto-configure Algolia index on startup',
+      type: 'boolean',
+      default: 'true',
+    },
+    hideReindexButton: {
+      description: 'Hide re-index button in admin UI',
+      type: 'boolean',
+      default: 'false',
+    },
+    reindexAccess: {
+      description: 'Access control function for re-index operations',
+      type: '(req: PayloadRequest) => boolean',
+      default: '(req) => !!req.user',
+    },
+    fieldTransformers: {
+      description: 'Custom field transformation functions',
+      type: 'Record<string, FieldTransformer>',
+      default: '-',
+    },
+    disabled: {
+      description: 'Disable the plugin entirely',
+      type: 'boolean',
+      default: 'false',
+    },
+  }}
+/>
+
+### Collection Configuration
+
+Each collection in the `collections` array:
+
+```typescript
+interface CollectionAlgoliaConfig {
+  slug: string          // Collection slug
+  indexFields: string[] // Fields to index in Algolia
+}
+```
+
+**Example:**
+```typescript
+collections: [
+  {
+    slug: 'posts',
+    indexFields: ['title', 'excerpt', 'content', 'author', 'tags'],
+  },
+  {
+    slug: 'products',
+    indexFields: ['name', 'description', 'category', 'sku'],
+  },
+]
+```
+
+## API Reference
+
+### Search Endpoint
+
+Perform search queries against your Algolia index.
+
+**Default Endpoint:** `GET /search`
+
+#### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `query` | `string` | Search term |
+| `enrichResults` | `boolean` | Fetch fresh documents from Payload |
+| `select` | `object` | Field selection for enriched results |
+| `depth` | `object` | Depth options for enriched results |
+| `hitsPerPage` | `number` | Number of results per page |
+| `filters` | `string` | Algolia filters |
+
+#### Basic Example
+
+```javascript
+// Simple search
+const response = await fetch('/search?query=javascript&hitsPerPage=10')
+const results = await response.json()
+
+console.log(results.hits) // Search results
+console.log(results.nbHits) // Total number of hits
+```
+
+#### With Enrichment
+
+```javascript
+import qs from 'qs-esm'
+
+const params = {
+  query: 'javascript',
+  enrichResults: true,
+  select: {
+    posts: { title: true, content: true, author: true },
+  },
+  depth: {
+    posts: 2,
+  },
+}
+
+const response = await fetch(`/search?${qs.stringify(params)}`)
+const { hits, enrichedHits } = await response.json()
+
+// hits: Original Algolia results with search metadata
+// enrichedHits: Fresh documents from Payload (keyed by ID)
+```
+
+### Re-index Endpoint
+
+Manually trigger a full re-index of a collection.
+
+**Default Endpoint:** `POST /reindex/:collectionSlug`
+
+#### Example
+
+```javascript
+// Re-index the 'posts' collection
+const response = await fetch('/reindex/posts', { method: 'POST' })
+const result = await response.json()
+
+console.log(result.message) // "Collection 'posts' has been re-indexed successfully"
+```
+
+## Advanced Features
+
+### Result Enrichment
+
+By default, search results come directly from Algolia for maximum speed. Enable enrichment to get fresh, access-controlled data from your Payload database.
+
+#### Benefits
+- **Data Freshness**: Guaranteed up-to-date information
+- **Security**: Respects Payload's access control rules
+- **Metadata Preservation**: Keeps Algolia's search metadata (highlights, snippets)
+
+#### Response Structure
+
+```json
+{
+  "hits": [
+    {
+      "objectID": "60c7c5d5f1d2a5001f6b0e3d",
+      "title": "JavaScript Basics",
+      "_highlightResult": {
+        "title": { "value": "<em>JavaScript</em> Basics" }
+      }
+    }
+  ],
+  "enrichedHits": {
+    "60c7c5d5f1d2a5001f6b0e3d": {
+      "id": "60c7c5d5f1d2a5001f6b0e3d",
+      "title": "JavaScript Basics",
+      "content": "Full article content...",
+      "author": { "name": "John Doe" },
+      "updatedAt": "2024-01-15T10:30:00Z"
+    }
+  },
+  "nbHits": 1,
+  "page": 0
+}
+```
+
+### Field Selection
+
+Control which fields are returned in enriched results:
+
+```javascript
+// Include only specific fields
+const selectFields = {
+  posts: { title: true, slug: true, author: true },
+  authors: { name: true, email: true },
+}
+
+// Or exclude specific fields
+const selectFields = {
+  posts: { internalNotes: false, draft: false },
+}
+```
+
+### Depth Control
+
+Control the depth of relationship population:
+
+```javascript
+const depthConfig = {
+  posts: 3,      // Populate posts to depth 3
+  authors: 1,    // Populate authors to depth 1
+  categories: 2, // Populate categories to depth 2
+}
+```
+
+**Example URL:**
+```
+/search?query=javascript&enrichResults=true&depth[posts]=3&depth[authors]=1
+```
+
+### Custom Field Transformers
+
+Transform complex field types before indexing in Algolia.
+
+#### Use Cases
+- **Group Fields**: Flatten nested data structures
+- **Custom Fields**: Handle proprietary field types
+- **Complex Data**: Convert objects/arrays to searchable strings
+
+#### Example: Group Field Transformer
+
+```typescript
+algoliaSearchPlugin({
+  // ... other config
+  collections: [
+    {
+      slug: 'posts',
+      indexFields: ['title', 'authorDetails'],
+    },
+  ],
+  fieldTransformers: {
+    group: (value, fieldConfig, collectionSlug) => {
+      if (fieldConfig.name === 'authorDetails' && value) {
+        const { name, title, bio } = value as any
+        return [name, title, bio].filter(Boolean).join(' ')
+      }
+      return null
+    },
+  },
+})
+```
+
+#### Built-in Transformers
+
+The plugin includes default transformers for:
+- **text**: Returns value as-is, or joins array elements
+- **richText**: Converts rich text to plain text
+- **relationship**: Extracts related document titles or names
+- **upload**: Indexes file names and metadata
+- **select**: Handles select field values
+- **array**: Joins array elements into a comma-separated string
+
+### Access Control
+
+Control who can trigger re-indexing operations.
+
+#### Custom Access Control
+
+Restrict access to specific user roles:
+
+```typescript
+algoliaSearchPlugin({
+  // ... other config
+  reindexAccess: (req) => {
+    return req.user?.role === 'admin' || req.user?.role === 'editor'
+  },
+})
+```
+
+#### Disable Re-indexing UI
+
+Hide the re-index button while keeping the endpoint active:
+
+```typescript
+algoliaSearchPlugin({
+  // ... other config
+  hideReindexButton: true,
+})
+```
+
+## Examples
+
+### Blog Setup
+
+```typescript
+algoliaSearchPlugin({
+  credentials: {
+    appId: process.env.ALGOLIA_APP_ID!,
+    apiKey: process.env.ALGOLIA_API_KEY!,
+    indexName: process.env.ALGOLIA_INDEX_NAME!,
+  },
+  collections: [
+    {
+      slug: 'posts',
+      indexFields: ['title', 'excerpt', 'content', 'tags'],
+    },
+    {
+      slug: 'authors',
+      indexFields: ['name', 'bio'],
+    },
+  ],
+})
+```
+
+### E-commerce Setup
+
+```typescript
+algoliaSearchPlugin({
+  credentials: {
+    appId: process.env.ALGOLIA_APP_ID!,
+    apiKey: process.env.ALGOLIA_API_KEY!,
+    indexName: process.env.ALGOLIA_INDEX_NAME!,
+  },
+  collections: [
+    {
+      slug: 'products',
+      indexFields: ['title', 'description', 'category', 'brand', 'sku'],
+    },
+  ],
+  fieldTransformers: {
+    group: (value, fieldConfig) => {
+      if (fieldConfig.name === 'specifications' && value) {
+        return Object.entries(value)
+          .map(([key, val]) => `${key}: ${val}`)
+          .join(' ')
+      }
+      return null
+    },
+  },
+})
+```
+
+### Frontend Search Component
+
+```jsx
+import { useState, useEffect } from 'react'
+import qs from 'qs-esm'
+
+const SearchResults = ({ query }) => {
+  const [results, setResults] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const searchProducts = async () => {
+      if (!query) return
+      
+      setLoading(true)
+      try {
+        const params = {
+          query,
+          enrichResults: true,
+          hitsPerPage: 20,
+          depth: {
+            products: 2,
+            categories: 1,
+          },
+          select: {
+            products: { 
+              title: true, 
+              description: true, 
+              price: true, 
+              category: true 
+            },
+            categories: { name: true, slug: true },
+          },
+        }
+
+        const response = await fetch(`/search?${qs.stringify(params)}`)
+        const data = await response.json()
+        setResults(data)
+      } catch (error) {
+        console.error('Search failed:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    searchProducts()
+  }, [query])
+
+  if (loading) return <div>Searching...</div>
+  if (!results) return null
+
+  return (
+    <div>
+      <p>{results.nbHits} results found</p>
+      {results.hits.map((hit) => {
+        const enrichedData = results.enrichedHits[hit.objectID]
+        return (
+          <div key={hit.objectID}>
+            <h3 
+              dangerouslySetInnerHTML={{ 
+                __html: hit._highlightResult.title.value 
+              }} 
+            />
+            {enrichedData && (
+              <>
+                <p>{enrichedData.description}</p>
+                <span>${enrichedData.price}</span>
+              </>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+```
+
+## Troubleshooting
+
+### Plugin Not Syncing Documents
+
+**Solutions:**
+1. Verify your Algolia credentials are correct
+2. Check that `indexFields` includes existing fields
+3. Ensure the API key has write permissions
+4. Check server logs for error messages
+
+### Search Endpoint Returns 404
+
+**Solutions:**
+1. Verify `searchEndpoint` is not set to `false`
+2. Check your server is running and the plugin is loaded
+3. Ensure the endpoint path doesn't conflict with existing routes
+
+### Enriched Results Empty
+
+**Solutions:**
+1. Verify documents exist in your Payload database
+2. Check access control permissions for the requesting user
+3. Ensure document IDs in Algolia match Payload document IDs
+
+### Performance Issues
+
+**For large collections:**
+1. Use field selection to limit response size
+2. Implement pagination with `hitsPerPage`
+3. Consider indexing only essential fields initially
+
+**For search performance:**
+- Use enrichment sparingly
+- Cache search results on the frontend
+- Consider Algolia's faceting for filters
+
+## Limitations
+
+<Callout title="Localization Support" type="warning">
+This plugin does not currently support Payload's localization features. Localized fields will not be indexed correctly.
+
+**Workarounds:**
+- Configure collections to use only one locale
+- Create separate non-localized fields for search indexing
+</Callout>
+
+## Links
+
+- [NPM Package](https://www.npmjs.com/package/@veiag/payload-algolia-search)
+- [GitHub Repository](https://github.com/veiag/payload-algolia-search)
+- [Algolia Documentation](https://www.algolia.com/doc/)
+
+## License
+
+[MIT](https://github.com/veiag/payload-algolia-search/blob/main/LICENSE)

@@ -1,26 +1,7 @@
-import Link from "next/link"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/shadcnButton"
-import { ArrowRight, CircleDot, Palette } from "lucide-react"
+import ComponentItem from "@/components/component-item"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-const components = [
-  {
-    name: "Lucide Icon Picker",
-    description: "A customizable icon picker field for PayloadCMS with Lucide icons, fuzzy search, and virtualized rendering.",
-    href: "/docs/fields/lucide-icon-picker",
-    icon: CircleDot,
-    badge: "New",
-  },
-  {
-    name: "Color Picker",
-    description: "A customizable color picker field with presets, debounce, and hex validation for PayloadCMS.",
-    href: "/docs/fields/color-picker",
-    icon: Palette,
-    badge: "New",
-  },
-  
-]
+import { fields } from "@/config/items"
 
 export default function ComponentsPage() {
   return (
@@ -34,32 +15,9 @@ export default function ComponentsPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {components.map((component) => {
-            const Icon = component.icon
+          {fields.map((component) => {
             return (
-              <Card key={component.name} className="relative overflow-hidden hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <Icon className="h-5 w-5 text-primary" />
-                      </div>
-                    </div>
-                    {component.badge && (
-                      <Badge variant="secondary">{component.badge}</Badge>
-                    )}
-                  </div>
-                  <CardTitle className="mt-4">{component.name}</CardTitle>
-                  <CardDescription>{component.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button asChild size="sm" className="w-full">
-                    <Link href={component.href}>
-                      View Field <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
+              <ComponentItem key={component.name} component={component} />
             )
           })}
 
