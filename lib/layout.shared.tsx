@@ -6,7 +6,7 @@ export function baseOptions(): BaseLayoutProps {
           title: (
             <div className="flex items-center gap-2">
               <span className="font-bold">PayloadCMS</span>
-              <span className="text-muted-foreground">Extra fields</span>
+              <span className="text-muted-foreground">Extensions</span>
             </div>
           ),
         },
@@ -19,6 +19,11 @@ export function baseOptions(): BaseLayoutProps {
             {
                 text:'Fields',
                 url:"/fields/",
+                active:'nested-url',
+            },
+            {
+                text:'Components',
+                url:"/components/",
                 active:'nested-url',
             }
         ],

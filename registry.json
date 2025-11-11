@@ -69,6 +69,29 @@
           "target": "~/src/fields/lucide-icon-picker/icons.ts"
         }
       ]
+    },
+    {
+      "name":"array-row-label",
+      "type":"registry:item",
+      "title":"Custom Array Row Label",
+      "description":"A custom array row label component for PayloadCMS.",
+      "files": [
+        {
+          "path": "registry/components/array-row-label/utility.ts",
+          "type": "registry:file",
+          "target": "~/src/components/array-row-label/utility.ts"
+        },
+        {
+          "path": "registry/components/array-row-label/index.tsx",
+          "type": "registry:file",
+          "target": "~/src/components/array-row-label/index.tsx"
+        },
+        {
+          "path": "registry/components/array-row-label/types.ts",
+          "type": "registry:file",
+          "target": "~/src/components/array-row-label/types.ts"
+        }
+      ]
     }
   ]
 }

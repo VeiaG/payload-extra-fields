@@ -11,25 +11,24 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 py-24 md:py-32 text-center">
         <Badge variant="secondary" className="mb-4">
-          PayloadCMS Custom Fields
+          PayloadCMS Extensions
         </Badge>
                    
-
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6 max-w-4xl">
-          Custom fields for{" "}
+          Custom fields & components for{" "}
           <div className="inline-flex gap-2 items-center overflow-visible">
             <PayloadLogo className="size-16 inline-block" />
               Payload
           </div>
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mb-8">
-          A collection of customizable, accessible custom fields built specifically for PayloadCMS.
-          Each field includes both the UI component and utility function to easily integrate into your schemas.
+          A growing collection of customizable, accessible fields and utility components built specifically for PayloadCMS.
+          Ready to copy, paste, and customize for your project.
         </p>
         <div className="flex gap-4 flex-wrap justify-center">
           <Button asChild size="lg">
-            <Link href="/fields">
-              Browse Fields <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href="/docs">
+              Browse Collection <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
@@ -43,7 +42,7 @@ export default function Home() {
       {/* Features Section */}
       <section className="px-4 py-16 md:py-24 bg-muted/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">Why use these fields?</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">Why use this collection?</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Built with best practices, fully customizable, and ready to drop into your PayloadCMS projects.
           </p>
@@ -67,7 +66,7 @@ export default function Home() {
                 </div>
                 <CardTitle>Fully Customizable</CardTitle>
                 <CardDescription>
-                  Every field is built to be customized. Change colors, styles, and behavior to match your needs.
+                  Every component is built to be customized. Change colors, styles, and behavior to match your needs.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -91,9 +90,9 @@ export default function Home() {
       <section className="px-4 py-16 md:py-24">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Available Fields</h2>
+            <h2 className="text-3xl font-bold mb-4">Custom Fields</h2>
             <p className="text-muted-foreground">
-              More fields coming soon!
+              Enhanced input fields for your PayloadCMS admin panel
             </p>
           </div>
 
@@ -118,7 +117,7 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
-             <Card className="hover:shadow-lg transition-shadow">
+            <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
                   <CardTitle>Lucide Icon Picker</CardTitle>
@@ -138,12 +137,53 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
+            <Card className="border-dashed bg-muted/30 col-span-2">
+              <CardHeader>
+                <CardTitle className="text-muted-foreground">More Coming Soon</CardTitle>
+                <CardDescription>
+                  We&apos;re working on more custom fields. Star the repo to stay updated!
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
 
+      {/* Components Preview Section */}
+      <section className="px-4 py-16 md:py-24 bg-muted/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Utility Components</h2>
+            <p className="text-muted-foreground">
+              Helper components to enhance your PayloadCMS development experience
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-2">
+                  <CardTitle>Array Row Label</CardTitle>
+                  <Badge>New</Badge>
+                </div>
+                <CardDescription>
+                  A utility component for PayloadCMS that provides customizable labels for array field items with template syntax and fallback support.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex gap-2">
+                  <Button asChild size="sm">
+                    <Link href="/docs/components/array-row-label">
+                      View Docs
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
             <Card className="border-dashed bg-muted/30">
               <CardHeader>
                 <CardTitle className="text-muted-foreground">More Coming Soon</CardTitle>
                 <CardDescription>
-                  We&apos;re working on more fields. Star the repo to stay updated!
+                  We&apos;re working on more utility components. Star the repo to stay updated!
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -152,16 +192,16 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 py-16 md:py-24 bg-muted/50">
+      <section className="px-4 py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
           <p className="text-muted-foreground mb-8">
-            Browse our fields or dive into the documentation.
+            Browse our collection or dive into the documentation.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Button asChild size="lg">
-              <Link href="/fields">
-                Browse Fields
+              <Link href="/docs">
+                View Documentation
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">

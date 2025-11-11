@@ -72,4 +72,39 @@ export const MyCollection = {
             "/registry/fields/lucide-icon-picker/icons.ts",
         ],
     },
-};
+    "array-row-label": {
+        name: "array-row-label",
+        component: dynamic(
+            () => import("@/components/examples/array-row-label-demo")
+        ),
+        source: `import { customRowLabel } from '@/components/array-row-label/utility'
+
+export const MyCollection = {
+  slug: 'my-collection',
+  fields: [
+    {
+      name: 'articles',
+      type: 'array',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'author',
+          type: 'text',
+        },
+      ],
+      admin: {
+        ...customRowLabel({ fieldToUse: 'title' }),
+      },
+    },
+  ],
+}`,
+        files:[
+            "/registry/components/array-row-label/index.tsx",
+            "/registry/components/array-row-label/utility.ts",
+            "/registry/components/array-row-label/types.ts",
+        ]
+      }}
