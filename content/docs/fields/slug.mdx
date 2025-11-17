@@ -1,0 +1,234 @@
+---
+title: Slug Field
+description: A copy of Payload's native slug field that lives in your codebase, allowing you to customize the slugify function and UI behavior.
+---
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {ManualInstall} from "@/components/manual-install"
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+<Callout title="About This Field" type="info">
+  This field is a direct copy of Payload's native slug field. While Payload's built-in slug field is compiled into the core and cannot be customized, this version lives in your codebase, giving you full control over the slugify logic and UI behavior.
+</Callout>
+
+## Installation
+
+<Tabs defaultValue="cli">
+  <TabsList >
+    <TabsTrigger value="cli">CLI</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+
+Use the following command to install the slug field:
+
+```npm
+npx shadcn@latest add https://payload.veiag.dev/r/slug.json
+```
+
+<Callout title="Important" type="error">
+  Currently, shadcn CLI removes `use client` directive from the top of the files. 
+  Please ensure to add it back to the top of `index.tsx` file in the slug field directory.
+  I think this should be fixed in future releases of shadcn CLI.
+</Callout>
+
+  </TabsContent>
+  <TabsContent value="manual">
+
+Copy and paste the following code into your project to manually install the slug field:
+
+<ManualInstall name="slug" />
+
+  </TabsContent>
+</Tabs>
+
+## Usage
+
+### Basic usage
+
+```typescript
+import { slugField } from '@/fields/slug/field'
+
+export const MyCollection = {
+  slug: 'posts',
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+    },
+    slugField(),
+  ],
+}
+```
+
+### Custom field names
+
+```typescript
+import { slugField } from '@/fields/slug/field'
+
+export const MyCollection = {
+  slug: 'posts',
+  fields: [
+    {
+      name: 'heading',
+      type: 'text',
+      required: true,
+    },
+    slugField({
+      name: 'permalink',
+      fieldToUse: 'heading',
+      checkboxName: 'autoGenerate',
+    }),
+  ],
+}
+```
+
+### With localization
+
+```typescript
+import { slugField } from '@/fields/slug/field'
+
+export const MyCollection = {
+  slug: 'posts',
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+      localized: true,
+    },
+    slugField({
+      localized: true,
+    }),
+  ],
+}
+```
+
+### Advanced usage with overrides
+
+```typescript
+import { slugField } from '@/fields/slug/field'
+
+export const MyCollection = {
+  slug: 'posts',
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+    },
+    slugField({
+      name: 'slug',
+      fieldToUse: 'title',
+      required: true,
+      position: 'sidebar',
+      overrides: (field) => ({
+        ...field,
+        fields: field.fields.map((f) => {
+          if (f.name === 'slug') {
+            return {
+              ...f,
+              admin: {
+                ...f.admin,
+                description: 'This will be used in the URL',
+              },
+            }
+          }
+          return f
+        }),
+      }),
+    }),
+  ],
+}
+```
+
+## Customizing Slugify Logic
+
+The main advantage of this field is the ability to customize the slug generation. Edit the `slugify` function in `src/fields/slug/slugify.ts`:
+
+```typescript
+// Default implementation
+export const slugify = (val?: string) =>
+  val
+    ?.replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+    .toLowerCase()
+
+// Custom example: Use underscores instead of dashes
+export const slugify = (val?: string) =>
+  val
+    ?.replace(/ /g, '_')
+    .replace(/[^\w_]+/g, '')
+    .toLowerCase()
+
+// Custom example: Keep uppercase letters and use periods
+export const slugify = (val?: string) =>
+  val
+    ?.replace(/ /g, '.')
+    .replace(/[^\w.]+/g, '')
+
+```
+
+## API Reference
+
+<TypeTable
+  type={{
+    name: {
+      description: 'The name of the slug field',
+      type: 'string',
+      default: "'slug'",
+    },
+    checkboxName: {
+      description: 'Name of the hidden checkbox that controls auto-generation',
+      type: 'string',
+      default: "'generateSlug'",
+    },
+    fieldToUse: {
+      description: 'The name of the field to generate the slug from',
+      type: 'string',
+      default: "'title'",
+    },
+    localized: {
+      description: 'Enable localization for the slug field',
+      type: 'boolean',
+      default: 'false',
+    },
+    required: {
+      description: 'Whether the slug field is required',
+      type: 'boolean',
+      default: 'true',
+    },
+    position: {
+      description: 'Position of the field in the admin UI',
+      type: "'sidebar'",
+      default: "'sidebar'",
+    },
+    overrides: {
+      description: 'Function to override field at a granular level',
+      type: '(field: RowField) => RowField',
+      default: '-',
+    },
+  }}
+/>
+
+## How It Works
+
+The slug field automatically generates URL-friendly slugs based on another field (typically `title`). The generation logic follows these rules:
+
+1. **During creation**: The slug auto-generates unless manually modified
+2. **During updates**: 
+   - If autosave is disabled and there's no slug, it will generate
+   - If autosave is enabled, the doc is unpublished, and the slug hasn't been manually modified, it will generate
+3. **Stabilization**: Once the above criteria are met, the slug stabilizes to protect live URLs from accidental changes
+
+The field uses a hidden checkbox to track whether the user has manually modified the slug, ensuring intentional URL changes don't get overwritten.
+
+## Features
+
+- **Auto-generation** - Automatically creates URL-friendly slugs from specified fields
+- **Manual Override** - Users can manually edit slugs when needed
+- **Stabilization** - Protects published URLs from accidental changes
+- **Customizable Logic** - Modify the slugify function to match your requirements
+- **Localization Support** - Works with Payload's localization system
+- **Indexed & Unique** - Ensures slugs are indexed and unique in the database
+- **Sidebar Positioning** - Defaults to sidebar placement for better UX

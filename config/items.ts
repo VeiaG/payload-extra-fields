@@ -25,15 +25,20 @@ export const fields: ComponentItemType[] =  [
     description: "A customizable icon picker field for PayloadCMS with Lucide icons, fuzzy search, and virtualized rendering.",
     href: "/docs/fields/lucide-icon-picker",
     icon: CircleDot,
-    badge: "New",
   },
   {
     name: "Color Picker",
     description: "A customizable color picker field with presets, debounce, and hex validation for PayloadCMS.",
     href: "/docs/fields/color-picker",
     icon: Palette,
-    badge: "New",
   },
+  {
+    name: "Slug Field",
+    description:" A copy of Payload's native slug field that lives in your codebase, allowing you to customize the slugify function and UI behavior.",
+    href: "/docs/fields/slug",
+    icon: Tag,
+    badge: "New",
+  }
   
 ]
 

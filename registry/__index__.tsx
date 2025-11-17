@@ -102,9 +102,22 @@ export const MyCollection = {
     },
   ],
 }`,
-        files:[
+        files: [
             "/registry/components/array-row-label/index.tsx",
             "/registry/components/array-row-label/utility.ts",
             "/registry/components/array-row-label/types.ts",
-        ]
-      }}
+        ],
+    },
+    "slug":{
+      name: "slug",
+      component: ()=>null,//No preview
+      files:[
+        "/registry/fields/slug/index.tsx",
+        "/registry/fields/slug/field.ts",
+        "/registry/fields/slug/countVersions.ts",
+        "/registry/fields/slug/generateSlug.ts",
+        "/registry/fields/slug/slugify.ts",
+        "/registry/fields/slug/style.scss",
+      ]
+    }
+};

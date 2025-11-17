@@ -92,6 +92,44 @@
           "target": "~/src/components/array-row-label/types.ts"
         }
       ]
+    },
+    {
+      "name":"slug",
+      "type":"registry:item",
+      "title":"Slug Field",
+      "description":"Copy of original payload slug field to allow code customization.",
+      "files": [
+        {
+          "path": "registry/fields/slug/field.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/slug/field.ts"
+        },
+        {
+          "path": "registry/fields/slug/index.tsx",
+          "type": "registry:file",
+          "target": "~/src/fields/slug/index.tsx"
+        },
+        {
+          "path": "registry/fields/slug/countVersions.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/slug/countVersions.ts"
+        },
+        {
+          "path": "registry/fields/slug/generateSlug.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/slug/generateSlug.ts"
+        },
+        {
+          "path": "registry/fields/slug/slugify.ts",
+          "type": "registry:file",
+          "target": "~/src/fields/slug/slugify.ts"
+        },
+        {
+          "path": "registry/fields/slug/style.scss",
+          "type": "registry:file",
+          "target": "~/src/fields/slug/style.scss"
+        }
+      ]
     }
   ]
 }
