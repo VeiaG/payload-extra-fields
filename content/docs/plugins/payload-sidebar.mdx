@@ -1,0 +1,976 @@
+---
+title: Sidebar Plugin
+description: A powerful, customizable navigation sidebar plugin for Payload CMS with sortable groups, pinning, custom links, and multi-color badges.
+---
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+## Overview
+
+The Payload Sidebar Plugin enhances your Payload CMS admin interface with a powerful, customizable navigation sidebar featuring sortable groups, user-specific pinning, custom links, and visual notification badges.
+
+<Callout title="Plugin Author" type="info">
+Created by [Kari (tatsuyakari1203)](https://github.com/tatsuyakari1203)
+</Callout>
+
+<Callout title="Features" type="info">
+- **Sortable Navigation Groups**: Define custom order for your navigation groups
+- **Pin Items**: Pin frequently used items to the top (persisted per-user)
+- **Custom Links & Groups**: Add your own navigation links and groups
+- **Custom Icons**: Use Lucide icons or your own components
+- **Multi-color Badges**: Show notification counts with different colors
+- **i18n Support**: Works with English, Vietnamese, and other languages
+- **Zero Config**: Works out of the box, just add to plugins
+</Callout>
+
+## Requirements [!toc]
+
+- Payload CMS 3.x
+- Next.js 14+ or 15+
+- React 18+ or 19+
+
+## Installation
+
+```npm
+npm install payload-sidebar-plugin
+```
+
+## Quick Start [!toc]
+
+### 1. Add Plugin to Config [!toc]
+
+The plugin works with zero configuration. Simply add it to your `payload.config.ts`:
+
+```typescript
+import { buildConfig } from 'payload'
+import { payloadSidebar } from 'payload-sidebar-plugin'
+
+export default buildConfig({
+  plugins: [
+    payloadSidebar(), // Zero config - works out of the box!
+  ],
+  // ... rest of config
+})
+```
+
+<Callout title="Automatic Setup" type="info">
+The plugin will automatically replace the default navigation with the enhanced sidebar. No additional configuration required to get started!
+</Callout>
+
+### 2. Optional: Configure Custom Features [!toc]
+
+Enhance your sidebar with custom links, groups, and ordering:
+
+```typescript
+import { payloadSidebar } from 'payload-sidebar-plugin'
+import { BarChart3, BookOpen } from 'lucide-react'
+
+export default buildConfig({
+  plugins: [
+    payloadSidebar({
+      groupOrder: {
+        Content: 1,
+        Users: 2,
+        Settings: 3,
+      },
+      customLinks: [
+        {
+          label: 'Analytics',
+          href: '/admin/analytics',
+          group: 'Tools',
+          icon: BarChart3,
+        },
+      ],
+    }),
+  ],
+})
+```
+
+## Configuration
+
+### Plugin Options [!toc]
+
+<TypeTable
+  type={{
+    groupOrder: {
+      description: 'Priority map for sorting navigation groups. Lower numbers appear first.',
+      type: 'Record<string, number>',
+      default: '{}',
+    },
+    customLinks: {
+      description: 'Add custom navigation links to the sidebar',
+      type: 'CustomLink[]',
+      default: '[]',
+    },
+    customGroups: {
+      description: 'Define custom groups or configure existing ones',
+      type: 'CustomGroup[]',
+      default: '[]',
+    },
+    enablePinning: {
+      description: 'Enable/disable the pin items feature',
+      type: 'boolean',
+      default: 'true',
+    },
+    pinnedStorage: {
+      description: 'Where to store pinned items (server-side preferences or client-side localStorage)',
+      type: "'preferences' | 'localStorage'",
+      default: "'preferences'",
+    },
+    classPrefix: {
+      description: 'CSS class prefix for styling customization',
+      type: 'string',
+      default: "'nav'",
+    },
+    cssVariables: {
+      description: 'Override default CSS variables for custom styling',
+      type: 'Record<string, string>',
+      default: '{}',
+    },
+  }}
+/>
+
+### CustomLink Interface [!toc]
+
+Each custom link supports the following properties:
+
+<TypeTable
+  type={{
+    label: {
+      description: 'Display label for the link',
+      type: 'string',
+      default: '-',
+    },
+    href: {
+      description: 'URL path or full URL',
+      type: 'string',
+      default: '-',
+    },
+    group: {
+      description: 'Group to place this link in',
+      type: 'string',
+      default: "'Custom'",
+    },
+    icon: {
+      description: 'Icon key (from defaults) or Lucide icon component',
+      type: 'string | LucideIcon',
+      default: "'link'",
+    },
+    external: {
+      description: 'Opens in new tab. Auto-detected for http/https URLs',
+      type: 'boolean',
+      default: 'auto',
+    },
+    order: {
+      description: 'Position within the group (lower = higher)',
+      type: 'number',
+      default: '50',
+    },
+    pinnable: {
+      description: 'Whether this link can be pinned',
+      type: 'boolean',
+      default: 'true',
+    },
+  }}
+/>
+
+### CustomGroup Interface [!toc]
+
+<TypeTable
+  type={{
+    label: {
+      description: 'Group label (used for display and identification)',
+      type: 'string',
+      default: '-',
+    },
+    order: {
+      description: 'Sort order priority (lower = appears first)',
+      type: 'number',
+      default: '50',
+    },
+    defaultOpen: {
+      description: 'Whether group starts expanded',
+      type: 'boolean',
+      default: 'true',
+    },
+  }}
+/>
+
+## Custom Links & Groups
+
+Add your own navigation links that aren't tied to Payload collections or globals. Perfect for admin dashboards, external documentation, third-party integrations, and quick access tools.
+
+### Basic Usage [!toc]
+
+```typescript
+import { payloadSidebar } from 'payload-sidebar-plugin'
+import { BarChart3, BookOpen, FileCode, Github } from 'lucide-react'
+
+export default buildConfig({
+  plugins: [
+    payloadSidebar({
+      customLinks: [
+        // Internal admin views
+        {
+          label: 'System Monitor',
+          href: '/admin/system-monitor',
+          group: 'Tools',
+          icon: BarChart3,
+          order: 1,
+        },
+        {
+          label: 'API Explorer',
+          href: '/api',
+          group: 'Tools',
+          icon: FileCode,
+          order: 2,
+        },
+        // External resources (opens in new tab)
+        {
+          label: 'Payload Docs',
+          href: 'https://payloadcms.com/docs',
+          group: 'Resources',
+          icon: BookOpen,
+          external: true,
+        },
+        {
+          label: 'GitHub Repo',
+          href: 'https://github.com/your-org/your-repo',
+          group: 'Resources',
+          icon: Github,
+          external: true,
+        },
+      ],
+
+      customGroups: [
+        { label: 'Tools', order: 15 },
+        { label: 'Resources', order: 99, defaultOpen: false },
+      ],
+    }),
+  ],
+})
+```
+
+### Available Default Icon Keys [!toc]
+
+The plugin includes default icon mappings for common use cases:
+
+**Content:**
+- `pages`, `posts`, `media`, `files`, `categories`
+
+**Users & Settings:**
+- `users`, `settings`, `dashboard`
+
+**Tools:**
+- `terminal`, `api`, `file-code`, `chart`
+
+**External:**
+- `link`, `external-link`, `globe`, `docs`
+
+**General:**
+- `sparkles`, `zap`, `star`, `folder`, `help`, `info`
+
+## Group Ordering
+
+Control the order of navigation groups with support for internationalization:
+
+```typescript
+payloadSidebar({
+  groupOrder: {
+    // English labels
+    Content: 1,
+    Media: 2,
+    Users: 3,
+    Settings: 10,
+
+    // Vietnamese labels (for i18n)
+    'Nội dung': 1,
+    'Phương tiện': 2,
+    'Người dùng': 3,
+    'Cài đặt': 10,
+
+    // Custom groups
+    Tools: 15,
+    Resources: 99,
+
+    // Unlisted groups default to priority 50
+  },
+})
+```
+
+<Callout title="Internationalization" type="info">
+The plugin supports multiple language labels for the same group. Define ordering for each language variant your application uses.
+</Callout>
+
+## Pinning Items
+
+Users can pin frequently used items to the top of the sidebar for quick access. Pinned items appear in a dedicated "Pinned" section and persist across sessions.
+
+### Features [!toc]
+
+- Click the pin icon on any navigation item to pin it
+- Pinned items appear at the top in a dedicated section
+- Unpin items by clicking the X button
+- Works with collections, globals, and custom links
+- User-specific pins (each user has their own pinned items)
+
+### Storage Options
+
+**Server-side storage (recommended):**
+
+```typescript
+payloadSidebar({
+  pinnedStorage: 'preferences', // Uses Payload's preference system
+})
+```
+
+Server-side storage syncs pinned items across devices and sessions using Payload's built-in preference system.
+
+**Client-side storage:**
+
+```typescript
+payloadSidebar({
+  pinnedStorage: 'localStorage', // Simpler, but doesn't sync across devices
+})
+```
+
+Client-side storage is simpler to set up but doesn't sync across devices or sessions.
+
+### API Routes Setup 
+
+When using `pinnedStorage: 'preferences'`, you need to create API routes to handle server-side persistence. Create these four routes in your Next.js application:
+
+#### 1. Get Pinned Items Route [!toc]
+
+Create `src/app/api/nav/pinned/route.ts`:
+
+```typescript
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
+
+export interface PinnedItem {
+  slug: string
+  type: 'collection' | 'global' | 'custom'
+  order: number
+}
+
+export async function GET() {
+  try {
+    const payload = await getPayload({ config })
+    const headersList = await headers()
+    const { user } = await payload.auth({ headers: headersList })
+
+    if (!user) {
+      return NextResponse.json({ pinnedItems: [] })
+    }
+
+    const prefs = await payload.find({
+      collection: 'payload-preferences',
+      where: {
+        key: { equals: 'nav-pinned' },
+        'user.value': { equals: user.id },
+      },
+      limit: 1,
+      depth: 0,
+    })
+
+    const pinnedItems = (prefs.docs[0]?.value as { pinnedItems?: PinnedItem[] })?.pinnedItems || []
+    return NextResponse.json({ pinnedItems })
+  } catch (error) {
+    console.error('Error fetching pinned items:', error)
+    return NextResponse.json({ pinnedItems: [] })
+  }
+}
+```
+
+#### 2. Pin Item Route [!toc]
+
+Create `src/app/api/nav/pin/route.ts`:
+
+```typescript
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
+import type { PinnedItem } from '../pinned/route'
+
+export async function POST(request: Request) {
+  try {
+    const payload = await getPayload({ config })
+    const headersList = await headers()
+    const { user } = await payload.auth({ headers: headersList })
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { slug, type } = await request.json()
+
+    const prefs = await payload.find({
+      collection: 'payload-preferences',
+      where: {
+        key: { equals: 'nav-pinned' },
+        'user.value': { equals: user.id },
+      },
+      limit: 1,
+      depth: 0,
+    })
+
+    const existingItems: PinnedItem[] =
+      (prefs.docs[0]?.value as { pinnedItems?: PinnedItem[] })?.pinnedItems || []
+
+    if (existingItems.some(item => item.slug === slug && item.type === type)) {
+      return NextResponse.json({ success: true, message: 'Already pinned' })
+    }
+
+    const newItems: PinnedItem[] = [...existingItems, { slug, type, order: existingItems.length }]
+    const userCollection = (user as { collection?: string }).collection || 'users'
+
+    await payload.db.upsert({
+      collection: 'payload-preferences',
+      data: {
+        key: 'nav-pinned',
+        user: { relationTo: userCollection, value: user.id },
+        value: { pinnedItems: newItems },
+      },
+      where: {
+        and: [
+          { key: { equals: 'nav-pinned' } },
+          { 'user.value': { equals: user.id } },
+          { 'user.relationTo': { equals: userCollection } },
+        ],
+      },
+    })
+
+    return NextResponse.json({ success: true, pinnedItems: newItems })
+  } catch (error) {
+    console.error('Error pinning item:', error)
+    return NextResponse.json({ error: 'Failed to pin' }, { status: 500 })
+  }
+}
+```
+
+#### 3. Unpin Item Route [!toc]
+
+Create `src/app/api/nav/unpin/route.ts`:
+
+```typescript
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
+import type { PinnedItem } from '../pinned/route'
+
+export async function POST(request: Request) {
+  try {
+    const payload = await getPayload({ config })
+    const headersList = await headers()
+    const { user } = await payload.auth({ headers: headersList })
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { slug, type } = await request.json()
+
+    const prefs = await payload.find({
+      collection: 'payload-preferences',
+      where: {
+        key: { equals: 'nav-pinned' },
+        'user.value': { equals: user.id },
+      },
+      limit: 1,
+      depth: 0,
+    })
+
+    if (!prefs.docs[0]) {
+      return NextResponse.json({ success: true, message: 'No pinned items' })
+    }
+
+    const existingItems: PinnedItem[] =
+      (prefs.docs[0]?.value as { pinnedItems?: PinnedItem[] })?.pinnedItems || []
+
+    const newItems = existingItems
+      .filter(item => !(item.slug === slug && item.type === type))
+      .map((item, index) => ({ ...item, order: index }))
+
+    const userCollection = (user as { collection?: string }).collection || 'users'
+
+    await payload.db.upsert({
+      collection: 'payload-preferences',
+      data: {
+        key: 'nav-pinned',
+        user: { relationTo: userCollection, value: user.id },
+        value: { pinnedItems: newItems },
+      },
+      where: {
+        and: [
+          { key: { equals: 'nav-pinned' } },
+          { 'user.value': { equals: user.id } },
+          { 'user.relationTo': { equals: userCollection } },
+        ],
+      },
+    })
+
+    return NextResponse.json({ success: true, pinnedItems: newItems })
+  } catch (error) {
+    console.error('Error unpinning item:', error)
+    return NextResponse.json({ error: 'Failed to unpin' }, { status: 500 })
+  }
+}
+```
+
+#### 4. Reorder Pinned Items Route [!toc]
+
+Create `src/app/api/nav/reorder/route.ts`:
+
+```typescript
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
+import type { PinnedItem } from '../pinned/route'
+
+export async function POST(request: Request) {
+  try {
+    const payload = await getPayload({ config })
+    const headersList = await headers()
+    const { user } = await payload.auth({ headers: headersList })
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { items } = await request.json()
+
+    const reorderedItems = items.map((item: PinnedItem, index: number) => ({
+      ...item,
+      order: index,
+    }))
+
+    const userCollection = (user as { collection?: string }).collection || 'users'
+
+    await payload.db.upsert({
+      collection: 'payload-preferences',
+      data: {
+        key: 'nav-pinned',
+        user: { relationTo: userCollection, value: user.id },
+        value: { pinnedItems: reorderedItems },
+      },
+      where: {
+        and: [
+          { key: { equals: 'nav-pinned' } },
+          { 'user.value': { equals: user.id } },
+          { 'user.relationTo': { equals: userCollection } },
+        ],
+      },
+    })
+
+    return NextResponse.json({ success: true, pinnedItems: reorderedItems })
+  } catch (error) {
+    console.error('Error reordering items:', error)
+    return NextResponse.json({ error: 'Failed to reorder' }, { status: 500 })
+  }
+}
+```
+
+## Badge System
+
+Display notification counts, statistics, or status indicators on navigation items using the badge system.
+
+### Setup [!toc]
+
+#### Step 1: Create Badge Provider [!toc]
+
+Create a client component to provide badge data:
+
+```tsx
+// src/components/NavBadgeProvider.tsx
+'use client'
+
+import React from 'react'
+import { SidebarBadgeProvider } from 'payload-sidebar-plugin/components'
+
+export function NavBadgeProvider({ children }: { children: React.ReactNode }) {
+  const badges = {
+    // Key must match collection/global slug exactly
+    posts: { count: 5, color: 'blue' as const },
+    comments: { count: 12, color: 'red' as const },
+  }
+
+  return <SidebarBadgeProvider badges={badges}>{children}</SidebarBadgeProvider>
+}
+```
+
+#### Step 2: Register as Admin Provider [!toc]
+
+Add the provider to your Payload config:
+
+```typescript
+// payload.config.ts
+export default buildConfig({
+  admin: {
+    components: {
+      providers: ['@/components/NavBadgeProvider'],
+    },
+  },
+})
+```
+
+#### Step 3: Generate Import Map [!toc]
+
+```npm
+npx payload generate:importmap
+```
+
+### Badge Colors
+
+| Color    | Use Case                  | Example                      |
+| -------- | ------------------------- | ---------------------------- |
+| `red`    | Urgent, unread, errors    | Unread messages, failed jobs |
+| `orange` | Warnings, needs attention | Pending comments             |
+| `yellow` | Drafts, pending review    | Draft posts                  |
+| `blue`   | Informational             | Total pages                  |
+| `green`  | Success, published        | Published posts              |
+| `gray`   | Archived, inactive        | Media count                  |
+
+### Real-time Badges Example
+
+Create dynamic badges that update based on your application state:
+
+```tsx
+// src/components/NavBadgeProvider.tsx
+'use client'
+
+import React from 'react'
+import { SidebarBadgeProvider } from 'payload-sidebar-plugin/components'
+import { useNotifications } from '@/providers/NotificationProvider'
+
+export function NavBadgeProvider({ children }: { children: React.ReactNode }) {
+  const { unreadChats, unreadComments } = useNotifications()
+
+  const badges: Record<
+    string,
+    { count: number; color: 'red' | 'yellow' | 'blue' | 'green' | 'orange' | 'gray' }
+  > = {}
+
+  // Only show badges when there are unread items
+  if (unreadChats > 0) {
+    badges['chat-dashboard'] = { count: unreadChats, color: 'red' }
+  }
+  if (unreadComments > 0) {
+    badges['comments-dashboard'] = { count: unreadComments, color: 'orange' }
+  }
+
+  return <SidebarBadgeProvider badges={badges}>{children}</SidebarBadgeProvider>
+}
+```
+
+## Styling
+
+The plugin uses BEM-style CSS classes with a configurable prefix for easy customization.
+
+### CSS Class Structure [!toc]
+
+```css
+/* Main container */
+.nav { }
+.nav--nav-open { }
+.nav__scroll { }
+.nav__wrap { }
+
+/* Pinned section */
+.nav__pinned-section { }
+.nav__pinned-header { }
+.nav__pinned-items { }
+.nav__pinned-item { }
+
+/* Links */
+.nav__link { }
+.nav__link--active { }
+.nav__link--external { }
+.nav__link-icon { }
+.nav__link-label { }
+.nav__link-badge { }
+.nav__link-external-icon { }
+
+/* Pin button */
+.nav__pin-btn { }
+.nav__pin-btn--pinned { }
+.nav__unpin-btn { }
+```
+
+### Custom Styling Example [!toc]
+
+```css
+/* Enhance pinned section */
+.nav__pinned-section {
+  background: var(--theme-elevation-50);
+  border-radius: 8px;
+  margin: 8px;
+  padding: 8px;
+}
+
+/* Custom active state */
+.nav__link--active {
+  background: var(--theme-elevation-100);
+  border-left: 3px solid var(--theme-success-500);
+}
+
+/* Style external link icon */
+.nav__link-external-icon {
+  opacity: 0.5;
+  margin-left: auto;
+}
+```
+
+### CSS Variables Override [!toc]
+
+```typescript
+payloadSidebar({
+  cssVariables: {
+    '--badge-red-bg': '#ef4444',
+    '--badge-blue-bg': '#3b82f6',
+    '--badge-green-bg': '#10b981',
+  },
+})
+```
+
+## Examples
+
+### Blog Setup [!toc]
+
+```typescript
+import { payloadSidebar } from 'payload-sidebar-plugin'
+import { BookOpen, FileText } from 'lucide-react'
+
+export default buildConfig({
+  plugins: [
+    payloadSidebar({
+      groupOrder: {
+        Content: 1,
+        Media: 2,
+        Users: 3,
+        Settings: 10,
+      },
+      customLinks: [
+        {
+          label: 'Writing Guide',
+          href: 'https://docs.example.com/writing',
+          group: 'Resources',
+          icon: BookOpen,
+          external: true,
+        },
+      ],
+      customGroups: [
+        { label: 'Resources', order: 99, defaultOpen: false },
+      ],
+    }),
+  ],
+})
+```
+
+### E-commerce Setup [!toc]
+
+```typescript
+import { payloadSidebar } from 'payload-sidebar-plugin'
+import { BarChart3, Package } from 'lucide-react'
+
+export default buildConfig({
+  plugins: [
+    payloadSidebar({
+      groupOrder: {
+        Products: 1,
+        Orders: 2,
+        Customers: 3,
+        Analytics: 4,
+        Settings: 99,
+      },
+      customLinks: [
+        {
+          label: 'Sales Dashboard',
+          href: '/admin/sales-dashboard',
+          group: 'Analytics',
+          icon: BarChart3,
+        },
+        {
+          label: 'Inventory',
+          href: '/admin/inventory',
+          group: 'Products',
+          icon: Package,
+          order: 0,
+        },
+        {
+          label: 'Stripe Dashboard',
+          href: 'https://dashboard.stripe.com',
+          group: 'External',
+          external: true,
+        },
+      ],
+      customGroups: [
+        { label: 'Analytics', order: 4 },
+        { label: 'External', order: 100, defaultOpen: false },
+      ],
+    }),
+  ],
+})
+```
+
+## API Reference
+
+### Exports 
+
+```typescript
+// Main plugin
+import { payloadSidebar } from 'payload-sidebar-plugin'
+
+// Client components
+import {
+  SidebarBadgeProvider,
+  CustomNavClient,
+  NavContent,
+  NavLink,
+  PinnedSection,
+} from 'payload-sidebar-plugin/components'
+
+// Hooks
+import { useBadge, usePinnedNav } from 'payload-sidebar-plugin/hooks'
+
+// Server components (RSC)
+import { CustomNav } from 'payload-sidebar-plugin/rsc'
+
+// Types
+import type {
+  PayloadSidebarPluginOptions,
+  CustomLink,
+  CustomGroup,
+  NavEntity,
+  PinnedItem,
+  BadgeConfig,
+  BadgeColor,
+} from 'payload-sidebar-plugin'
+```
+
+### useBadge Hook
+
+Access badge information for a specific navigation item:
+
+```tsx
+import { useBadge } from 'payload-sidebar-plugin/hooks'
+
+function MyComponent() {
+  const badge = useBadge('posts')
+  // Returns { count: 5, color: 'blue' } or null
+
+  if (badge) {
+    return <span className={`badge--${badge.color}`}>{badge.count}</span>
+  }
+  return null
+}
+```
+
+### usePinnedNav Hook
+
+Manage pinned navigation items programmatically:
+
+```tsx
+import { usePinnedNav } from 'payload-sidebar-plugin/hooks'
+
+function MyComponent() {
+  const {
+    pinnedItems,  // Array of pinned items
+    loading,      // Loading state
+    isPinned,     // Check if item is pinned
+    pinItem,      // Pin an item
+    unpinItem,    // Unpin an item
+    togglePin,    // Toggle pin state
+    refresh,      // Refresh pinned items
+  } = usePinnedNav()
+
+  return (
+    <button onClick={() => togglePin('posts', 'collection')}>
+      {isPinned('posts', 'collection') ? 'Unpin' : 'Pin'} Posts
+    </button>
+  )
+}
+```
+
+## Troubleshooting
+
+### Plugin Not Showing Custom Navigation [!toc]
+
+**Solutions:**
+1. Regenerate the import map:
+   ```npm
+   npx payload generate:importmap
+   ```
+2. Clear Next.js cache and restart:
+   ```bash
+   rm -rf .next && npm run dev
+   ```
+3. Check browser console for errors
+
+### Custom Links Not Appearing [!toc]
+
+**Solutions:**
+1. Verify `customLinks` array is properly formatted
+2. Ensure `group` property matches a group in `customGroups` or existing Payload groups
+3. Check that the icon import is correct (if using Lucide icons)
+4. Verify no TypeScript errors in your configuration
+
+### Badges Not Appearing [!toc]
+
+**Solutions:**
+1. Ensure `SidebarBadgeProvider` is registered in `admin.components.providers`
+2. Verify badge keys match collection/global slugs exactly (case-sensitive)
+3. Check that badge count is greater than 0
+4. Run `npx payload generate:importmap` after adding the provider
+5. Clear browser cache and restart development server
+
+### Pinned Items Not Persisting [!toc]
+
+**For `pinnedStorage: 'preferences'`:**
+1. Verify all 4 API routes are created in the correct locations
+2. Check that user is authenticated when pinning
+3. Inspect browser console for API errors
+4. Verify the `payload-preferences` collection exists
+5. Check server logs for database errors
+
+**For `pinnedStorage: 'localStorage'`:**
+1. Verify browser supports localStorage
+2. Check for privacy extensions blocking storage
+3. Look for localStorage quota errors in console
+
+### Style Conflicts [!toc]
+
+**Solutions:**
+1. Use a custom `classPrefix` to namespace classes:
+   ```typescript
+   payloadSidebar({
+     classPrefix: 'my-nav',
+   })
+   ```
+2. Override specific CSS variables
+3. Use browser DevTools to inspect and identify conflicting styles
+4. Check for CSS specificity issues
+
+### Performance Issues [!toc]
+
+**Solutions:**
+1. Limit the number of custom links (recommended: under 20)
+2. Use `defaultOpen: false` for groups with many items
+3. Optimize badge calculations to avoid frequent re-renders
+4. Consider lazy-loading external link metadata
+
+## Links
+
+- [NPM Package](https://www.npmjs.com/package/payload-sidebar-plugin)
+- [GitHub Repository](https://github.com/tatsuyakari1203/payload-sidebar-plugin)
+- [Report Issues](https://github.com/tatsuyakari1203/payload-sidebar-plugin/issues)
+
+## License
+
+MIT © [Kari (tatsuyakari1203)](https://github.com/tatsuyakari1203)

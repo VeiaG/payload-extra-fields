@@ -1,4 +1,4 @@
-import { Tag, CircleDot, Palette, Search } from "lucide-react";
+import { Tag, CircleDot, Palette, Search, PanelRight } from "lucide-react";
 
 export type ComponentItemType = {
   name: string;
@@ -48,5 +48,12 @@ export const plugins: ComponentItemType[] = [
     description:"A powerful plugin to sync your Payload CMS collections with Algolia for fast and extensive search capabilities.",
     href: "/docs/plugins/algolia-search",
     icon: Search,
+  },
+  {
+    name:'Sidebar Plugin',
+    description: "A powerful, customizable navigation sidebar plugin for Payload CMS with sortable groups, pinning, custom links, and multi-color badges.",
+    href: "/docs/plugins/payload-sidebar",
+    icon: PanelRight,
+    badge:"Community Plugin"
   }
 ]

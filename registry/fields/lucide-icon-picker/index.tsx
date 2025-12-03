@@ -120,7 +120,7 @@ const LucideIconPicker: React.FC<TextFieldClientProps & IconPickerProps> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [showCategories, setShowCategories] = useState(false)
 
-  const drawerSlug = `icon-${field.name}-drawer`
+  const drawerSlug = `icon-${field.name}-drawer-${path}`
 
   // Fuse.js instance for fuzzy search
   const fuseInstance = useMemo(() => {
