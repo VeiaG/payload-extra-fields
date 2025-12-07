@@ -1,4 +1,4 @@
-import { Tag, CircleDot, Palette, Search, PanelRight } from "lucide-react";
+import { Tag, CircleDot, Palette, Search, PanelRight, Command } from "lucide-react";
 
 export type ComponentItemType = {
   name: string;
@@ -43,6 +43,13 @@ export const fields: ComponentItemType[] =  [
 ]
 
 export const plugins: ComponentItemType[] = [
+  {
+    name: "CmdK Plugin",
+    description: "A command menu plugin for Payload CMS that enables quick navigation and actions using keyboard shortcuts and a searchable interface.",
+    href: "/docs/plugins/payload-cmdk",
+    icon: Command ,
+    badge: "New",
+  },
   {
     name: "Algolia Search Plugin",
     description:"A powerful plugin to sync your Payload CMS collections with Algolia for fast and extensive search capabilities.",
