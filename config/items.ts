@@ -44,11 +44,17 @@ export const fields: ComponentItemType[] =  [
 
 export const plugins: ComponentItemType[] = [
   {
+    name:"Payload Enhanced Sidebar Plugin",
+    description: "An enhanced sidebar plugin for Payload CMS that adds a tabbed navigation system to organize collections and globals into logical groups.",
+    href: "/docs/plugins/payload-enhanced-sidebar",
+    icon: PanelRight,
+    badge: "New",
+  },
+  {
     name: "CmdK Plugin",
     description: "A command menu plugin for Payload CMS that enables quick navigation and actions using keyboard shortcuts and a searchable interface.",
     href: "/docs/plugins/payload-cmdk",
     icon: Command ,
-    badge: "New",
   },
   {
     name: "Algolia Search Plugin",
